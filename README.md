@@ -18,4 +18,9 @@ implementation 'dev.ai4j:ai4j:0.0.1'
 
 ```
 
+## Example of usage
+[OpenAI Chat API example](src/main/java/dev/ai4j/examples/OpenAiChatExample.java)
+[Chat with your PDF file using Pinecone and OpenAI for embeddings](src/main/java/dev/ai4j/examples/PdfFileOpenAiPineconeExample.java)
+
+
 Work in progress...
