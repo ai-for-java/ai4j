@@ -23,7 +23,8 @@ Coming soon:
 - Automatic Document summarization
 - Loading of multiple Documents from directory
 - Loading Documents by HTTP
-- etc
+
+**Please [let us know what features you need](https://github.com/ai-for-java/ai4j/issues/new).**
 
 ## Start using
 Maven:
