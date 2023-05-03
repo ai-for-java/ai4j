@@ -1,5 +1,3 @@
-package dev.ai4j.examples;
-
 import dev.ai4j.agent.tool.webpage.WebPageScrapperTool;
 
 import java.util.Optional;
