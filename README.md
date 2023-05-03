@@ -22,7 +22,7 @@ Coming soon:
 - Integration with [Chroma](https://www.trychroma.com/) vector DB
 - Automatic Document summarization
 - Loading of multiple Documents from directory
-- Loading Documents by HTTP
+- Loading Documents via HTTP
 
 **Please [let us know what features you need](https://github.com/ai-for-java/ai4j/issues/new).**
 
