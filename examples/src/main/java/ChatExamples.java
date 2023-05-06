@@ -25,12 +25,9 @@ public class ChatExamples {
                     .modelProvider(OPEN_AI)
                     .modelName(GPT_3_5_TURBO)
                     .apiKey(System.getenv("OPENAI_API_KEY")) // https://platform.openai.com/account/api-keys
-//                    .messageFromSystem("You are a helpful assistant.") // to give LLM a specific "character"
-//                    .previousMessages(null) // optionally, you can load previous messages if you sored them somewhere
-//                    .historyCapacityInTokens(300) // how many tokens to keep in history and send LLM on each interaction. this way you can control the cost
-//                    .historyCapacityInMessages(10) // you can also specify capacity in the number of messages (or both at the same time)
-//                    .temperature(0.3) // you might want to tweak LLM temperature to make it more predictable (closer to 0) or more creative (closer to 1)
-//                    .timeout(Duration.ofSeconds(120)) // you might want to increase timeout because LLMs are ofter slow to respond
+                    .messageFromSystem("You are a helpful assistant.")
+                    .historyCapacityInTokens(100)
+                    .temperature(0.5)
                     .build();
 
             BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
