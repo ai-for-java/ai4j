@@ -1,19 +1,20 @@
 import com.google.common.collect.ImmutableMap;
+import dev.ai4j.model.completion.OpenAiCompletionModel;
 import dev.ai4j.model.embedding.Embedding;
-import dev.ai4j.model.embedding.openai.OpenAiEmbeddingModel;
-import dev.ai4j.model.language.openai.OpenAiLanguageModel;
-import dev.ai4j.model.language.prompt.PromptTemplate;
-import dev.ai4j.model.openai.OpenAiModel;
-import dev.ai4j.schema.document.Document;
-import dev.ai4j.schema.document.loader.PdfFileLoader;
-import dev.ai4j.schema.document.splitter.DocumentSplitter;
-import dev.ai4j.schema.document.splitter.OverlappingDocumentSplitter;
-import dev.ai4j.vector.pinecone.PineconeDatabase;
+import dev.ai4j.model.embedding.OpenAiEmbeddingModel;
+import dev.ai4j.prompt.PromptTemplate;
+import dev.ai4j.document.Document;
+import dev.ai4j.document.loader.PdfFileLoader;
+import dev.ai4j.document.splitter.DocumentSplitter;
+import dev.ai4j.document.splitter.OverlappingDocumentSplitter;
+import dev.ai4j.model.embedding.PineconeDatabase;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import static dev.ai4j.model.openai.OpenAiModelName.GPT_3_5_TURBO;
+import static dev.ai4j.model.openai.OpenAiModelName.TEXT_EMBEDDING_ADA_002;
 import static java.util.stream.Collectors.joining;
 
 public class PdfFileOpenAiPineconeExample {
@@ -37,8 +38,8 @@ public class PdfFileOpenAiPineconeExample {
         // Convert chunks into embeddings (semantic vectors).
 
         OpenAiEmbeddingModel openAiEmbeddings = OpenAiEmbeddingModel.builder()
-                .apiKey(System.getenv("OPENAI_API_KEY"))
-                .model(OpenAiModel.TEXT_EMBEDDING_ADA_002)
+                .apiKey(System.getenv("OPENAI_API_KEY")) // https://platform.openai.com/account/api-keys
+                .modelName(TEXT_EMBEDDING_ADA_002)
                 .build();
         Collection<Embedding> embeddings = openAiEmbeddings.embed(pdfDocumentChunks);
 
@@ -49,7 +50,7 @@ public class PdfFileOpenAiPineconeExample {
                 .apiKey(System.getenv("PINECONE_API_KEY"))
                 .environment("northamerica-northeast1-gcp")
                 .projectName("19a129b")
-                .index("test-s1-1536")
+                .index("test-s1-1536") // make sure the dimensions of the Pinecone index match the dimensions of the embedding model (1536 for text-embedding-ada-002)
                 .build();
         pineconeDatabase.persist(embeddings);
 
@@ -64,7 +65,6 @@ public class PdfFileOpenAiPineconeExample {
         Embedding embeddingForQuestion = openAiEmbeddings.embed(question);
         Collection<Embedding> relatedEmbeddings = pineconeDatabase.findRelated(embeddingForQuestion);
 
-
         // Create a prompt for LLM that includes original question and found embeddings.
 
         PromptTemplate promptTemplate = PromptTemplate.from("Using only the information enclosed in triple angle brackets, answer this question: {question} <<<{embeddings}>>>");
@@ -78,9 +78,9 @@ public class PdfFileOpenAiPineconeExample {
 
         // Send formatted prompt to LLM.
 
-        OpenAiLanguageModel openAiLanguageModel = OpenAiLanguageModel.builder()
-                .apiKey(System.getenv("OPENAI_API_KEY"))
-                .model(OpenAiModel.GPT_3_5_TURBO)
+        OpenAiCompletionModel openAiLanguageModel = OpenAiCompletionModel.builder()
+                .apiKey(System.getenv("OPENAI_API_KEY")) // https://platform.openai.com/account/api-keys
+                .modelName(GPT_3_5_TURBO)
                 .build();
         String answer = openAiLanguageModel.complete(promptTemplate.apply(parameters));
 
