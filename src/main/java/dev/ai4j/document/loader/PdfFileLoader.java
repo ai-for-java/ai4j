@@ -1,6 +1,6 @@
-package dev.ai4j.schema.document.loader;
+package dev.ai4j.document.loader;
 
-import dev.ai4j.schema.document.Document;
+import dev.ai4j.document.Document;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.val;

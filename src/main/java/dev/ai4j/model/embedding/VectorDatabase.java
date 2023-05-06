@@ -1,4 +1,4 @@
-package dev.ai4j.vector.db;
+package dev.ai4j.model.embedding;
 
 import dev.ai4j.model.embedding.Embedding;
 

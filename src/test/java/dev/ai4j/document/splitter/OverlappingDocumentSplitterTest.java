@@ -1,6 +1,6 @@
-package dev.ai4j.schema.document.splitter;
+package dev.ai4j.document.splitter;
 
-import dev.ai4j.schema.document.Document;
+import dev.ai4j.document.Document;
 import lombok.val;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -10,7 +10,7 @@ import org.junit.jupiter.params.provider.NullAndEmptySource;
 import java.util.Arrays;
 import java.util.List;
 
-import static dev.ai4j.schema.document.Document.from;
+import static dev.ai4j.document.Document.from;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;

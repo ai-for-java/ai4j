@@ -1,7 +1,5 @@
-package dev.ai4j.vector.pinecone;
+package dev.ai4j.model.embedding;
 
-import dev.ai4j.model.embedding.Embedding;
-import dev.ai4j.vector.db.VectorDatabase;
 import com.google.protobuf.Struct;
 import com.google.protobuf.Value;
 import io.pinecone.PineconeClient;
@@ -27,7 +25,8 @@ import static java.util.stream.Collectors.toSet;
 
 public class PineconeDatabase implements VectorDatabase {
 
-    private static final String TEXT = "text";
+    private static final String DEFAULT_NAMESPACE = "default";
+    private static final String METADATA_ORIGINAL_TEXT = "text";
 
     PineconeConnection connection;
     String nameSpace;
@@ -46,7 +45,7 @@ public class PineconeDatabase implements VectorDatabase {
                 .withIndexName(index);
 
         this.connection = pineconeClient.connect(connectionConfig); // TODO close
-        this.nameSpace = nameSpace == null ? "default" : nameSpace;
+        this.nameSpace = nameSpace == null ? DEFAULT_NAMESPACE : nameSpace;
     }
 
     @Override
@@ -62,12 +61,12 @@ public class PineconeDatabase implements VectorDatabase {
 
         embeddings.forEach(embedding -> {
 
-            val embeddingText = Value.newBuilder()
+            val originalText = Value.newBuilder()
                     .setStringValue(embedding.getText())
                     .build();
 
             val vectorMetadata = Struct.newBuilder()
-                    .putFields(TEXT, embeddingText)
+                    .putFields(METADATA_ORIGINAL_TEXT, originalText)
                     .build();
 
             val vector = Vector.newBuilder()
@@ -129,7 +128,7 @@ public class PineconeDatabase implements VectorDatabase {
     private static Embedding toEmbedding(Vector vector) {
         val text = vector.getMetadata()
                 .getFieldsMap()
-                .get(TEXT)
+                .get(METADATA_ORIGINAL_TEXT)
                 .getStringValue();
 
         return new Embedding(text, toDoubles(vector.getValuesList()));

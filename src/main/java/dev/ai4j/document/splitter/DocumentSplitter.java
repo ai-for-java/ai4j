@@ -1,6 +1,6 @@
-package dev.ai4j.schema.document.splitter;
+package dev.ai4j.document.splitter;
 
-import dev.ai4j.schema.document.Document;
+import dev.ai4j.document.Document;
 
 import java.util.List;
 

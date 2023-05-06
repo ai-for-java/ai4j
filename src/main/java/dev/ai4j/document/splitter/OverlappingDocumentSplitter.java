@@ -1,10 +1,9 @@
-package dev.ai4j.schema.document.splitter;
+package dev.ai4j.document.splitter;
 
-import dev.ai4j.schema.document.Document;
+import dev.ai4j.document.Document;
 import lombok.AllArgsConstructor;
 import lombok.val;
 import lombok.var;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +16,7 @@ public class OverlappingDocumentSplitter implements DocumentSplitter {
 
     @Override
     public List<Document> split(Document document) {
-        if (StringUtils.isEmpty(document.getContents())) {
+        if (document.getContents() == null || document.getContents().isEmpty()) {
             throw new IllegalArgumentException("Document content should not be null or empty");
         }
 

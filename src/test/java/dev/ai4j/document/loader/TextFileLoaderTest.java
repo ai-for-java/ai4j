@@ -1,4 +1,4 @@
-package dev.ai4j.schema.document.loader;
+package dev.ai4j.document.loader;
 
 import lombok.val;
 import org.junit.jupiter.api.Test;
@@ -15,7 +15,7 @@ class TextFileLoaderTest {
     void should_load_text_file_with_utf8_charset_by_default() {
 
         val loader = TextFileLoader.builder()
-                .absolutePathToTextFile(System.getProperty("user.dir") + "/src/test/java/dev/ai4j/schema/document/loader/test-file-utf8.txt")
+                .absolutePathToTextFile(System.getProperty("user.dir") + "/src/test/java/dev/ai4j/document/loader/test-file-utf8.txt")
                 .build();
 
         val document = loader.load();
@@ -27,7 +27,7 @@ class TextFileLoaderTest {
     void should_load_text_file_with_specified_charset() {
 
         val loader = TextFileLoader.builder()
-                .absolutePathToTextFile(System.getProperty("user.dir") + "/src/test/java/dev/ai4j/schema/document/loader/test-file-iso-8859-1.txt")
+                .absolutePathToTextFile(System.getProperty("user.dir") + "/src/test/java/dev/ai4j/document/loader/test-file-iso-8859-1.txt")
                 .charset(ISO_8859_1)
                 .build();
 

@@ -4,7 +4,7 @@ Java library for smooth integration with AI tools and services.
 
 ## Current capabilities:
 - Integration with [OpenAI (ChatGPT)](https://platform.openai.com/docs/introduction) for:
-  - [Chats](https://platform.openai.com/docs/guides/chat)
+  - [Chats](https://platform.openai.com/docs/guides/chatFlow)
   - [Completions](https://platform.openai.com/docs/guides/completion)
   - [Embeddings](https://platform.openai.com/docs/guides/embeddings)
 - Integration with [Pinecone](https://docs.pinecone.io/docs/overview) vector database (embeddings)
@@ -19,7 +19,7 @@ Coming soon:
   - Scrapping web pages
   - etc
 - Memory for chats and agents
-- Integration with [Chroma](https://www.trychroma.com/) vector DB
+- Integration with other vector DBs
 - Automatic Document summarization
 - Loading of multiple Documents from directory
 - Loading Documents via HTTP
@@ -43,8 +43,8 @@ implementation 'dev.ai4j:ai4j:0.0.1'
 ```
 
 ## See code examples
-- [OpenAI (ChatGPT) Chat API example](examples/OpenAiChatExample.java)
-- [Chat with your files using OpenAI (ChatGPT) and Pinecone (embeddings)](examples/PdfFileOpenAiPineconeExample.java)
+- [OpenAI (ChatGPT) Chat API example](examples2/OpenAiChatExample.java)
+- [Chat with your files using OpenAI (ChatGPT) and Pinecone (embeddings)](examples/src/main/java/PdfFileOpenAiPineconeExample.java)
 
 ## Request features
 Please [let us know what features you need](https://github.com/ai-for-java/ai4j/issues/new). 
@@ -63,4 +63,9 @@ Here are some best practices for using LLMs:
 - Specify steps to achieve the desired goal yourself. This will make the LLM do what you want it to do.
 - Provide examples. Sometimes it is best to show LLM a few examples of what you want instead of trying to explain it.
 - Ask LLM to provide structured output (JSON, XML, etc). This way you can parse response more easily and distinguish different parts of it.
-- Use unusual delimiters, such as \```triple backticks``` and <<<triple angle brackets>>> to help the LLM distinguish data or input from instructions.
+- Use unusual delimiters, such as \```triple backticks\``` and \<<<triple angle brackets\>>> to help the LLM distinguish data or input from instructions.
+
+## FAQ
+- **Where do I get OpenAI api key?**
+See [this tutorial](https://help.socialintents.com/article/188-how-to-find-your-openai-api-key-for-chatgpt)
+ 

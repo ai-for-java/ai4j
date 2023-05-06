@@ -1,6 +1,7 @@
-package dev.ai4j.model.language.prompt;
+package dev.ai4j.prompt;
 
 import com.google.common.collect.ImmutableMap;
+import dev.ai4j.prompt.PromptTemplate;
 import lombok.val;
 import org.junit.jupiter.api.Test;
 

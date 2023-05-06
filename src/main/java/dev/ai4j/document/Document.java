@@ -1,4 +1,4 @@
-package dev.ai4j.schema.document;
+package dev.ai4j.document;
 
 
 import lombok.Value;

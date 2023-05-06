@@ -1,4 +1,4 @@
-package dev.ai4j.model.language.prompt;
+package dev.ai4j.prompt;
 
 import lombok.Value;
 
