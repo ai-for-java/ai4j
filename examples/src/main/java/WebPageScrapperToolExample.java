@@ -8,7 +8,7 @@ public class WebPageScrapperToolExample {
 
         WebPageScrapperTool scrapperTool = new WebPageScrapperTool();
 
-        Optional<String> scrapperResult = scrapperTool.execute("https://en.wikipedia.org/wiki/Artificial_intelligence");
+        Optional<String> scrapperResult = scrapperTool.execute("https://en.wikipedia.org/wiki/Special:Random");
 
         scrapperResult.ifPresent(System.out::println);
     }
