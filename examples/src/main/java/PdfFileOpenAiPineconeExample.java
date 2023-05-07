@@ -24,7 +24,7 @@ public class PdfFileOpenAiPineconeExample {
         // Load file with information you want to "talk" to LLM about.
         // Currently, text and PDF files are supported.
 
-        String absolutePathToPdfFile = System.getProperty("user.dir") + "/examples/large-language-models.pdf";
+        String absolutePathToPdfFile = System.getProperty("user.dir") + "/examples/src/main/java/large-language-models.pdf";
         PdfFileLoader pdfFileLoader = new PdfFileLoader(absolutePathToPdfFile);
         Document fullPdfDocument = pdfFileLoader.load();
 
