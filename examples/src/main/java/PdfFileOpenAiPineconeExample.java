@@ -1,13 +1,13 @@
 import com.google.common.collect.ImmutableMap;
-import dev.ai4j.model.completion.OpenAiCompletionModel;
-import dev.ai4j.model.embedding.Embedding;
-import dev.ai4j.model.embedding.OpenAiEmbeddingModel;
-import dev.ai4j.prompt.PromptTemplate;
 import dev.ai4j.document.Document;
 import dev.ai4j.document.loader.PdfFileLoader;
 import dev.ai4j.document.splitter.DocumentSplitter;
 import dev.ai4j.document.splitter.OverlappingDocumentSplitter;
+import dev.ai4j.model.completion.OpenAiCompletionModel;
+import dev.ai4j.model.embedding.Embedding;
+import dev.ai4j.model.embedding.OpenAiEmbeddingModel;
 import dev.ai4j.model.embedding.PineconeDatabase;
+import dev.ai4j.prompt.PromptTemplate;
 
 import java.util.Collection;
 import java.util.List;
@@ -71,7 +71,7 @@ public class PdfFileOpenAiPineconeExample {
         Map<String, Object> parameters = ImmutableMap.of(
                 "question", question,
                 "embeddings", relatedEmbeddings.stream()
-                        .map(Embedding::getText)
+                        .map(Embedding::getContent)
                         .collect(joining("\n\n"))
         );
 

@@ -62,7 +62,7 @@ public class SimpleChatHistory implements ChatHistory {
             currentNumberOfMessagesInHistory--;
         }
 
-        log.debug("Current stats: tokens: {}, messages: {}", getCurrentNumberOfTokens(), getCurrentNumberOfMessages());
+        log.debug("Current stats: { tokens: approximately {}, messages: {} }", getCurrentNumberOfTokens(), getCurrentNumberOfMessages());
     }
 
     private int getCurrentNumberOfTokens() {

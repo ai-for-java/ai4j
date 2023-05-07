@@ -7,6 +7,6 @@ import java.util.List;
 @Value
 public class Embedding {
 
-    String text;
+    String content;
     List<Double> vector;
 }

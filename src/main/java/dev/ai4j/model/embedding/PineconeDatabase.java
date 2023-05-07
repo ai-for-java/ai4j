@@ -62,7 +62,7 @@ public class PineconeDatabase implements VectorDatabase {
         embeddings.forEach(embedding -> {
 
             val originalText = Value.newBuilder()
-                    .setStringValue(embedding.getText())
+                    .setStringValue(embedding.getContent())
                     .build();
 
             val vectorMetadata = Struct.newBuilder()
