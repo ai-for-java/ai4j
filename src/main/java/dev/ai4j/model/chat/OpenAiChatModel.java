@@ -33,7 +33,10 @@ public class OpenAiChatModel implements ChatModel {
     private final Double temperature;
 
     @Builder
-    public OpenAiChatModel(String apiKey, OpenAiModelName modelName, Double temperature, Duration timeout) {
+    public OpenAiChatModel(String apiKey,
+                           OpenAiModelName modelName,
+                           Double temperature,
+                           Duration timeout) {
         this.openAiService = new OpenAiService(apiKey, timeout == null ? DEFAULT_TIMEOUT : timeout);
         this.modelName = modelName == null ? GPT_3_5_TURBO : modelName;
         this.temperature = temperature == null ? DEFAULT_TEMPERATURE : temperature;

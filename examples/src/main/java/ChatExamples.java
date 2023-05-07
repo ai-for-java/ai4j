@@ -1,9 +1,9 @@
 import dev.ai4j.flows.ChatFlow;
-import dev.ai4j.model.chat.ChatHistory;
 import dev.ai4j.model.chat.ChatMessage;
 import dev.ai4j.model.chat.MessageFromAi;
 import dev.ai4j.model.chat.MessageFromHuman;
 import dev.ai4j.model.chat.OpenAiChatModel;
+import dev.ai4j.model.chat.SimpleChatHistory;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -13,7 +13,6 @@ import java.util.List;
 
 import static dev.ai4j.model.chat.MessageFromHuman.messageFromHuman;
 import static dev.ai4j.model.openai.OpenAiModelName.GPT_3_5_TURBO;
-import static dev.ai4j.model.openai.OpenAiModelProvider.OPEN_AI;
 
 public class ChatExamples {
 
@@ -22,12 +21,16 @@ public class ChatExamples {
         public static void main(String[] args) throws IOException {
 
             ChatFlow chatFlow = ChatFlow.builder()
-                    .modelProvider(OPEN_AI)
-                    .modelName(GPT_3_5_TURBO)
-                    .apiKey(System.getenv("OPENAI_API_KEY")) // https://platform.openai.com/account/api-keys
-                    .messageFromSystem("You are a helpful assistant.")
-                    .historyCapacityInTokens(100)
-                    .temperature(0.5)
+                    .chatModel(OpenAiChatModel.builder()
+                            .modelName(GPT_3_5_TURBO)
+                            .apiKey(System.getenv("OPENAI_API_KEY")) // https://platform.openai.com/account/api-keys
+                            .temperature(0.5)
+                            .timeout(Duration.ofSeconds(60))
+                            .build())
+                    .chatHistory(SimpleChatHistory.builder()
+                            .messageFromSystem("You are a helpful assistant.")
+                            .capacityInTokens(100)
+                            .build())
                     .build();
 
             BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -56,7 +59,7 @@ public class ChatExamples {
                     .timeout(Duration.ofSeconds(120))
                     .build();
 
-            ChatHistory chatHistory = ChatHistory.builder()
+            SimpleChatHistory chatHistory = SimpleChatHistory.builder()
                     .messageFromSystem("You are a helpful assistant.")
                     .capacityInTokens(300)
                     .capacityInMessages(10)
@@ -69,9 +72,9 @@ public class ChatExamples {
             // You can process/modify the message before saving.
             chatHistory.add(messageFromHuman);
 
-            List<ChatMessage> messages = chatHistory.getMessageHistory();
+            List<ChatMessage> history = chatHistory.getHistory();
 
-            MessageFromAi messageFromAi = openAiChatModel.chat(messages);
+            MessageFromAi messageFromAi = openAiChatModel.chat(history);
 
             // Here is the same as above. You have full control.
             chatHistory.add(messageFromAi);

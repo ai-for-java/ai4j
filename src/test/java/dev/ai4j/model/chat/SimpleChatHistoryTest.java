@@ -13,23 +13,23 @@ import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.atIndex;
 
-class ChatHistoryTest {
+class SimpleChatHistoryTest {
 
     @Test
     void should_keep_specified_number_of_tokens_in_chat_history_1() {
 
         val messageFromSystem = messageFromSystemWithTokens(10);
-        val chatHistory = ChatHistory.builder()
+        val chatHistory = SimpleChatHistory.builder()
                 .messageFromSystem(messageFromSystem)
                 .capacityInTokens(30)
                 .build();
-        assertThat(chatHistory.getMessageHistory())
+        assertThat(chatHistory.getHistory())
                 .hasSize(1)
                 .containsExactly(messageFromSystem);
 
         val firstMessageFromHuman = messageFromHumanWithTokens(10);
         chatHistory.add(firstMessageFromHuman);
-        assertThat(chatHistory.getMessageHistory())
+        assertThat(chatHistory.getHistory())
                 .hasSize(2)
                 .containsExactly(
                         messageFromSystem,
@@ -38,7 +38,7 @@ class ChatHistoryTest {
 
         val firstMessageFromAi = messageFromAiWithTokens(10);
         chatHistory.add(firstMessageFromAi);
-        assertThat(chatHistory.getMessageHistory())
+        assertThat(chatHistory.getHistory())
                 .hasSize(3)
                 .containsExactly(
                         messageFromSystem,
@@ -48,7 +48,7 @@ class ChatHistoryTest {
 
         val secondMessageFromHuman = messageFromHumanWithTokens(10);
         chatHistory.add(secondMessageFromHuman);
-        assertThat(chatHistory.getMessageHistory())
+        assertThat(chatHistory.getHistory())
                 .hasSize(3)
                 .containsExactly(
                         messageFromSystem,
@@ -59,7 +59,7 @@ class ChatHistoryTest {
 
         val secondMessageFromAi = messageFromAiWithTokens(10);
         chatHistory.add(secondMessageFromAi);
-        assertThat(chatHistory.getMessageHistory())
+        assertThat(chatHistory.getHistory())
                 .hasSize(3)
                 .containsExactly(
                         messageFromSystem,
@@ -73,17 +73,17 @@ class ChatHistoryTest {
     void should_keep_specified_number_of_tokens_in_chat_history_2() {
 
         val messageFromSystem = messageFromSystemWithTokens(5);
-        val chatHistory = ChatHistory.builder()
+        val chatHistory = SimpleChatHistory.builder()
                 .messageFromSystem(messageFromSystem)
                 .capacityInTokens(20)
                 .build();
-        assertThat(chatHistory.getMessageHistory())
+        assertThat(chatHistory.getHistory())
                 .hasSize(1)
                 .containsExactly(messageFromSystem);
 
         val firstMessageFromHuman = messageFromHumanWithTokens(10);
         chatHistory.add(firstMessageFromHuman);
-        assertThat(chatHistory.getMessageHistory())
+        assertThat(chatHistory.getHistory())
                 .hasSize(2)
                 .containsExactly(
                         messageFromSystem, // 5 tokens
@@ -92,7 +92,7 @@ class ChatHistoryTest {
 
         val firstMessageFromAi = messageFromAiWithTokens(10);
         chatHistory.add(firstMessageFromAi);
-        assertThat(chatHistory.getMessageHistory())
+        assertThat(chatHistory.getHistory())
                 .hasSize(2)
                 .containsExactly(
                         messageFromSystem, // 5 tokens
@@ -102,7 +102,7 @@ class ChatHistoryTest {
 
         val secondMessageFromHuman = messageFromAiWithTokens(5);
         chatHistory.add(secondMessageFromHuman);
-        assertThat(chatHistory.getMessageHistory())
+        assertThat(chatHistory.getHistory())
                 .hasSize(3)
                 .containsExactly(
                         messageFromSystem, // 5 tokens
@@ -116,11 +116,11 @@ class ChatHistoryTest {
     void should_keep_200_tokens_in_chat_history_by_default() {
 
         val messageFromSystem = messageFromSystemWithTokens(10);
-        val chatHistory = ChatHistory.builder()
+        val chatHistory = SimpleChatHistory.builder()
                 .messageFromSystem(messageFromSystem)
                 // user did not configure maxTokensInHistory
                 .build();
-        assertThat(chatHistory.getMessageHistory())
+        assertThat(chatHistory.getHistory())
                 .hasSize(1)
                 .containsExactly(messageFromSystem);
 
@@ -128,7 +128,7 @@ class ChatHistoryTest {
             chatHistory.add(messageFromHumanWithTokens(10));
         }
 
-        assertThat(chatHistory.getMessageHistory())
+        assertThat(chatHistory.getHistory())
                 .contains(messageFromSystem, atIndex(0))
                 .hasSize(20); // 20 messages 10 tokens each = 200 tokens
     }
@@ -136,22 +136,22 @@ class ChatHistoryTest {
     @Test
     void should_keep_specified_number_of_tokens_in_history_without_message_from_system() {
 
-        val chatHistory = ChatHistory.builder()
+        val chatHistory = SimpleChatHistory.builder()
                 // user did not configure messageFromSystem
                 .capacityInTokens(20)
                 .build();
-        assertThat(chatHistory.getMessageHistory())
+        assertThat(chatHistory.getHistory())
                 .hasSize(0);
 
         val firstMessageFromHuman = messageFromHumanWithTokens(10);
         chatHistory.add(firstMessageFromHuman);
-        assertThat(chatHistory.getMessageHistory())
+        assertThat(chatHistory.getHistory())
                 .hasSize(1)
                 .containsExactly(firstMessageFromHuman);
 
         val firstMessageFromAi = messageFromAiWithTokens(10);
         chatHistory.add(firstMessageFromAi);
-        assertThat(chatHistory.getMessageHistory())
+        assertThat(chatHistory.getHistory())
                 .hasSize(2)
                 .containsExactly(
                         firstMessageFromHuman,
@@ -160,7 +160,7 @@ class ChatHistoryTest {
 
         val secondMessageFromHuman = messageFromHumanWithTokens(10);
         chatHistory.add(secondMessageFromHuman);
-        assertThat(chatHistory.getMessageHistory())
+        assertThat(chatHistory.getHistory())
                 .hasSize(2)
                 .containsExactly(
                         // firstMessageFromHuman was removed
@@ -170,7 +170,7 @@ class ChatHistoryTest {
 
         val secondMessageFromAi = messageFromAiWithTokens(10);
         chatHistory.add(secondMessageFromAi);
-        assertThat(chatHistory.getMessageHistory())
+        assertThat(chatHistory.getHistory())
                 .hasSize(2)
                 .containsExactly(
                         // firstMessageFromAi was removed
@@ -183,17 +183,17 @@ class ChatHistoryTest {
     void should_keep_specified_number_of_messages_in_chat_history() {
 
         val messageFromSystem = messageFromSystem("does not matter how many tokens");
-        val chatHistory = ChatHistory.builder()
+        val chatHistory = SimpleChatHistory.builder()
                 .messageFromSystem(messageFromSystem)
                 .capacityInMessages(3)
                 .build();
-        assertThat(chatHistory.getMessageHistory())
+        assertThat(chatHistory.getHistory())
                 .hasSize(1)
                 .containsExactly(messageFromSystem);
 
         val firstMessageFromHuman = messageFromHuman("does not matter how many tokens");
         chatHistory.add(firstMessageFromHuman);
-        assertThat(chatHistory.getMessageHistory())
+        assertThat(chatHistory.getHistory())
                 .hasSize(2)
                 .containsExactly(
                         messageFromSystem,
@@ -202,7 +202,7 @@ class ChatHistoryTest {
 
         val firstMessageFromAi = messageFromAi("does not matter how many tokens");
         chatHistory.add(firstMessageFromAi);
-        assertThat(chatHistory.getMessageHistory())
+        assertThat(chatHistory.getHistory())
                 .hasSize(3)
                 .containsExactly(
                         messageFromSystem,
@@ -212,7 +212,7 @@ class ChatHistoryTest {
 
         val secondMessageFromHuman = messageFromHuman("does not matter how many tokens");
         chatHistory.add(secondMessageFromHuman);
-        assertThat(chatHistory.getMessageHistory())
+        assertThat(chatHistory.getHistory())
                 .hasSize(3)
                 .containsExactly(
                         messageFromSystem,
@@ -223,7 +223,7 @@ class ChatHistoryTest {
 
         val secondMessageFromAi = messageFromAi("does not matter how many tokens");
         chatHistory.add(secondMessageFromAi);
-        assertThat(chatHistory.getMessageHistory())
+        assertThat(chatHistory.getHistory())
                 .hasSize(3)
                 .containsExactly(
                         messageFromSystem,
@@ -236,21 +236,21 @@ class ChatHistoryTest {
     @Test
     void should_keep_specified_number_of_messages_in_chat_history_without_message_from_system() {
 
-        val chatHistory = ChatHistory.builder()
+        val chatHistory = SimpleChatHistory.builder()
                 .capacityInMessages(2)
                 .build();
-        assertThat(chatHistory.getMessageHistory())
+        assertThat(chatHistory.getHistory())
                 .hasSize(0);
 
         val firstMessageFromHuman = messageFromHuman("does not matter how many tokens");
         chatHistory.add(firstMessageFromHuman);
-        assertThat(chatHistory.getMessageHistory())
+        assertThat(chatHistory.getHistory())
                 .hasSize(1)
                 .containsExactly(firstMessageFromHuman);
 
         val firstMessageFromAi = messageFromAi("does not matter how many tokens");
         chatHistory.add(firstMessageFromAi);
-        assertThat(chatHistory.getMessageHistory())
+        assertThat(chatHistory.getHistory())
                 .hasSize(2)
                 .containsExactly(
                         firstMessageFromHuman,
@@ -259,7 +259,7 @@ class ChatHistoryTest {
 
         val secondMessageFromHuman = messageFromHuman("does not matter how many tokens");
         chatHistory.add(secondMessageFromHuman);
-        assertThat(chatHistory.getMessageHistory())
+        assertThat(chatHistory.getHistory())
                 .hasSize(2)
                 .containsExactly(
                         // firstMessageFromHuman was removed
@@ -269,7 +269,7 @@ class ChatHistoryTest {
 
         val secondMessageFromAi = messageFromAi("does not matter how many tokens");
         chatHistory.add(secondMessageFromAi);
-        assertThat(chatHistory.getMessageHistory())
+        assertThat(chatHistory.getHistory())
                 .hasSize(2)
                 .containsExactly(
                         // firstMessageFromAi was removed
@@ -287,18 +287,18 @@ class ChatHistoryTest {
         // But due to maxTokensInHistory(20) it will keep only 2.
 
         val messageFromSystem = messageFromSystemWithTokens(10);
-        val chatHistory = ChatHistory.builder()
+        val chatHistory = SimpleChatHistory.builder()
                 .messageFromSystem(messageFromSystem)
                 .capacityInTokens(20)
                 .capacityInMessages(3)
                 .build();
-        assertThat(chatHistory.getMessageHistory())
+        assertThat(chatHistory.getHistory())
                 .hasSize(1)
                 .containsExactly(messageFromSystem);
 
         val firstMessageFromHuman = messageFromHumanWithTokens(10);
         chatHistory.add(firstMessageFromHuman);
-        assertThat(chatHistory.getMessageHistory())
+        assertThat(chatHistory.getHistory())
                 .hasSize(2)
                 .containsExactly(
                         messageFromSystem,
@@ -307,7 +307,7 @@ class ChatHistoryTest {
 
         val firstMessageFromAi = messageFromAiWithTokens(10);
         chatHistory.add(firstMessageFromAi);
-        assertThat(chatHistory.getMessageHistory())
+        assertThat(chatHistory.getHistory())
                 .hasSize(2)
                 .containsExactly(
                         messageFromSystem,
@@ -317,7 +317,7 @@ class ChatHistoryTest {
 
         val secondMessageFromHuman = messageFromHumanWithTokens(10);
         chatHistory.add(secondMessageFromHuman);
-        assertThat(chatHistory.getMessageHistory())
+        assertThat(chatHistory.getHistory())
                 .hasSize(2)
                 .containsExactly(
                         messageFromSystem,
@@ -335,18 +335,18 @@ class ChatHistoryTest {
         // But due to maxMessagesInHistory(2) it will keep only 2.
 
         val messageFromSystem = messageFromSystemWithTokens(10);
-        val chatHistory = ChatHistory.builder()
+        val chatHistory = SimpleChatHistory.builder()
                 .messageFromSystem(messageFromSystem)
                 .capacityInTokens(30)
                 .capacityInMessages(2)
                 .build();
-        assertThat(chatHistory.getMessageHistory())
+        assertThat(chatHistory.getHistory())
                 .hasSize(1)
                 .containsExactly(messageFromSystem);
 
         val firstMessageFromHuman = messageFromHumanWithTokens(10);
         chatHistory.add(firstMessageFromHuman);
-        assertThat(chatHistory.getMessageHistory())
+        assertThat(chatHistory.getHistory())
                 .hasSize(2)
                 .containsExactly(
                         messageFromSystem,
@@ -355,7 +355,7 @@ class ChatHistoryTest {
 
         val firstMessageFromAi = messageFromAiWithTokens(10);
         chatHistory.add(firstMessageFromAi);
-        assertThat(chatHistory.getMessageHistory())
+        assertThat(chatHistory.getHistory())
                 .hasSize(2)
                 .containsExactly(
                         messageFromSystem,
@@ -365,7 +365,7 @@ class ChatHistoryTest {
 
         val secondMessageFromHuman = messageFromHumanWithTokens(10);
         chatHistory.add(secondMessageFromHuman);
-        assertThat(chatHistory.getMessageHistory())
+        assertThat(chatHistory.getHistory())
                 .hasSize(2)
                 .containsExactly(
                         messageFromSystem,
@@ -384,12 +384,12 @@ class ChatHistoryTest {
                 messageFromAiWithTokens(10)
         );
 
-        val chatHistory = ChatHistory.builder()
+        val chatHistory = SimpleChatHistory.builder()
                 .previousMessages(previousMessages)
                 .capacityInTokens(30)
                 .build();
 
-        assertThat(chatHistory.getMessageHistory())
+        assertThat(chatHistory.getHistory())
                 .hasSize(3);
     }
 
@@ -403,19 +403,19 @@ class ChatHistoryTest {
                 messageFromAiWithTokens(10)
         );
 
-        val chatHistory = ChatHistory.builder()
+        val chatHistory = SimpleChatHistory.builder()
                 .previousMessages(previousMessages)
                 .capacityInMessages(3)
                 .build();
 
-        assertThat(chatHistory.getMessageHistory())
+        assertThat(chatHistory.getHistory())
                 .hasSize(3);
     }
 
     @Test
     void should_keep_all_history_without_restrictions() {
 
-        val chatHistory = ChatHistory.builder()
+        val chatHistory = SimpleChatHistory.builder()
                 .removeCapacityRestrictionInTokens()
                 .build();
 
@@ -423,7 +423,7 @@ class ChatHistoryTest {
             chatHistory.add(messageFromHumanWithTokens(1000));
         }
 
-        assertThat(chatHistory.getMessageHistory())
+        assertThat(chatHistory.getHistory())
                 .hasSize(1000);
     }
 }
