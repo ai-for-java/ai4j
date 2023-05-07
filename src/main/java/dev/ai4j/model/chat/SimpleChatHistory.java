@@ -12,7 +12,7 @@ import java.util.Optional;
 
 public class SimpleChatHistory implements ChatHistory {
 
-    public static final Logger log = LoggerFactory.getLogger(SimpleChatHistory.class);
+    private static final Logger log = LoggerFactory.getLogger(SimpleChatHistory.class);
 
     // safety net to limit the cost in case user did not define it himself
     private static final int DEFAULT_CAPACITY_IN_TOKENS = 200;

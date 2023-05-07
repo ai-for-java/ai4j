@@ -24,8 +24,6 @@ public class ChatExamples {
                     .chatModel(OpenAiChatModel.builder()
                             .modelName(GPT_3_5_TURBO)
                             .apiKey(System.getenv("OPENAI_API_KEY")) // https://platform.openai.com/account/api-keys
-                            .temperature(0.5)
-                            .timeout(Duration.ofSeconds(60))
                             .build())
                     .chatHistory(SimpleChatHistory.builder()
                             .messageFromSystem("You are a helpful assistant.")
