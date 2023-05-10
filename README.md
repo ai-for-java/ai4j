@@ -7,7 +7,7 @@ Java library for smooth integration with AI tools and services.
   - [Chats](https://platform.openai.com/docs/guides/chat)
   - [Completions](https://platform.openai.com/docs/guides/completion)
   - [Embeddings](https://platform.openai.com/docs/guides/embeddings)
-- [Chat History](https://github.com/ai-for-java/ai4j/blob/master/examples/src/main/java/ChatExamples.java) (convenient short-term momory for conversations with AI)
+- [Chat History](https://github.com/ai-for-java/ai4j/blob/master/examples/src/main/java/ChatExamples.java) (convenient short-term memory for conversations with AI)
 - [Chat Flow](https://github.com/ai-for-java/ai4j/blob/master/examples/src/main/java/ChatExamples.java) (the most simple way to chat with AI, keeping history)
 - Integration with [Pinecone](https://docs.pinecone.io/docs/overview) vector database (embeddings)
 - Parsing and loading documents:
