@@ -43,7 +43,6 @@ Maven:
 Gradle:
 ```
 implementation 'dev.ai4j:ai4j:0.1.0'
-
 ```
 
 ## See code examples
@@ -76,4 +75,4 @@ Here are some best practices for using LLMs:
 - Specify steps to achieve the desired goal yourself. This will make the LLM do what you want it to do.
 - Provide examples. Sometimes it is best to show LLM a few examples of what you want instead of trying to explain it.
 - Ask LLM to provide structured output (JSON, XML, etc). This way you can parse response more easily and distinguish different parts of it.
-- Use unusual delimiters, such as \```triple backticks``` and <<<triple angle brackets>>> to help the LLM distinguish data or input from instructions.
+- Use unusual delimiters, such as \```triple backticks``` and \<<<triple angle brackets\>>> to help the LLM distinguish data or input from instructions.
