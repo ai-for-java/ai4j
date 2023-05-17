@@ -56,6 +56,15 @@ Please [let us know what features you need](https://github.com/ai-for-java/ai4j/
 ## Contribute
 Please help us make this open-source library better by contributing.
 
+## Setup project locally
+```
+git clone https://github.com/ai-for-java/ai4j.git
+
+cd ai4j
+
+./mvnw clean install -Dgpg.skip
+```
+
 ## Best practices
 We highly recommend viewing [this amazing 90-minute tutorial](https://www.deeplearning.ai/short-courses/chatgpt-prompt-engineering-for-developers/) on prompt engineering best practices, presented by Andrew Ng (DeepLearning.AI) and Isa Fulford (OpenAI).
 This course will teach you how to use LLMs efficiently and achieve the best possible results. Good investment of your time!
