@@ -1,18 +1,23 @@
 package dev.ai4j.document.splitter;
 
 import dev.ai4j.document.Document;
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.val;
 import lombok.var;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@AllArgsConstructor
 public class OverlappingDocumentSplitter implements DocumentSplitter {
 
     private final int chunkSize;
     private final int chunkOverlap;
+
+    @Builder
+    public OverlappingDocumentSplitter(int chunkSize, int chunkOverlap) {
+        this.chunkSize = chunkSize;
+        this.chunkOverlap = chunkOverlap;
+    }
 
     @Override
     public List<Document> split(Document document) {

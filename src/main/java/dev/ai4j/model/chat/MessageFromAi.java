@@ -1,5 +1,7 @@
 package dev.ai4j.model.chat;
 
+import dev.ai4j.prompt.Prompt;
+
 public class MessageFromAi extends ChatMessage {
 
     public MessageFromAi(String contents) {
@@ -10,7 +12,15 @@ public class MessageFromAi extends ChatMessage {
         return new MessageFromAi(contents);
     }
 
+    public static MessageFromAi of(Prompt prompt) {
+        return new MessageFromAi(prompt.getPromptText());
+    }
+
     public static MessageFromAi messageFromAi(String contents) {
         return of(contents);
+    }
+
+    public static MessageFromAi messageFromAi(Prompt prompt) {
+        return of(prompt.getPromptText());
     }
 }

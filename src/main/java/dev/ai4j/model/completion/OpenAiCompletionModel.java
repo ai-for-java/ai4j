@@ -5,7 +5,6 @@ import com.theokanning.openai.completion.CompletionRequest;
 import com.theokanning.openai.completion.chat.ChatCompletionRequest;
 import com.theokanning.openai.completion.chat.ChatMessage;
 import com.theokanning.openai.service.OpenAiService;
-import dev.ai4j.model.completion.CompletionModel;
 import dev.ai4j.model.openai.OpenAiModelName;
 import dev.ai4j.prompt.Prompt;
 import lombok.Builder;
@@ -33,7 +32,7 @@ public class OpenAiCompletionModel implements CompletionModel {
 
     @Override
     public String complete(Prompt prompt) {
-        return complete(prompt.getText());
+        return complete(prompt.getPromptText());
     }
 
     @Override
