@@ -11,6 +11,7 @@ public class ChatFlow {
 
     private final ChatModel chatModel;
     private final ChatHistory chatHistory;
+    // TODO private final PromptTemplate promptTemplate;
 
     @Builder
     private ChatFlow(ChatModel chatModel, ChatHistory chatHistory) {
