@@ -42,7 +42,7 @@ public class PromptTemplate {
         validate(parameterName);
         validate(parameterValue);
         verifyParameterExists(parameterName, template);
-        return template.replaceAll(inBracketsEscaped(parameterName), parameterValue.toString());
+        return template.replaceAll(inDoubleCurlyBracketsEscaped(parameterName), parameterValue.toString());
     }
 
     private static void validate(String parameterName) {
@@ -60,17 +60,17 @@ public class PromptTemplate {
     }
 
     private static void verifyParameterExists(String parameterName, String template) {
-        if (!template.contains(inBrackets(parameterName))) {
+        if (!template.contains(inDoubleCurlyBrackets(parameterName))) {
             throw new IllegalArgumentException(String.format("There is no parameter '%s' in prompt template '%s'", parameterName, template));
         }
     }
 
-    private static String inBrackets(String parameterName) {
-        return "${" + parameterName + "}";
+    private static String inDoubleCurlyBrackets(String parameterName) {
+        return "{{" + parameterName + "}}";
     }
 
-    private static String inBracketsEscaped(String parameterName) {
-        return "\\$\\{" + parameterName + "\\}";
+    private static String inDoubleCurlyBracketsEscaped(String parameterName) {
+        return "\\{\\{" + parameterName + "\\}\\}";
     }
 
     public static PromptTemplate from(String template) {
