@@ -6,6 +6,7 @@ import com.theokanning.openai.completion.chat.ChatCompletionRequest;
 import com.theokanning.openai.service.OpenAiService;
 import dev.ai4j.model.ModelResponseHandler;
 import dev.ai4j.model.openai.OpenAiModelName;
+import dev.ai4j.utils.StopWatch;
 import io.reactivex.schedulers.Schedulers;
 import lombok.Builder;
 import lombok.val;
@@ -79,12 +80,14 @@ public class OpenAiChatModel implements ChatModel {
             val json = GSON.toJson(chatCompletionRequest);
             log.debug("Sending to OpenAI:\n{}", json);
         }
+        val sw = StopWatch.start();
 
         val chatCompletionResult = getNextOpenAiService().createChatCompletion(chatCompletionRequest);
 
+        val latency = sw.stop();
         if (log.isDebugEnabled()) {
             val json = GSON.toJson(chatCompletionResult);
-            log.debug("Received from OpenAI:\n{}", json);
+            log.debug("Received from OpenAI in {} ms:\n{}", latency, json);
         }
 
         return fromOpenAiMessage(chatCompletionResult.getChoices().get(0).getMessage());
