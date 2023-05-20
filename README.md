@@ -39,13 +39,13 @@ Maven:
 <dependency>
   <groupId>dev.ai4j</groupId>
   <artifactId>ai4j</artifactId>
-  <version>0.1.0</version>
+  <version>0.2.0</version>
 </dependency>
 ```
 
 Gradle:
 ```
-implementation 'dev.ai4j:ai4j:0.1.0'
+implementation 'dev.ai4j:ai4j:0.2.0'
 ```
 
 ## See code examples
@@ -66,7 +66,7 @@ git clone https://github.com/ai-for-java/ai4j.git
 
 cd ai4j
 
-./mvnw clean install -Dgpg.skip
+./mvnw clean install
 ```
 
 ## Best practices
