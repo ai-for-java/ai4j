@@ -50,9 +50,9 @@ implementation 'dev.ai4j:ai4j:0.2.1'
 ```
 
 ## See code examples
-- [Chat, ChatFlow and ChatHistory](https://github.com/ai-for-java/ai4j/blob/master/examples/src/main/java/ChatExamples.java)
-- [Chat with your files](https://github.com/ai-for-java/ai4j/blob/master/examples/src/main/java/DocumentQnAExamples.java)
-- [Structured outputs](https://github.com/ai-for-java/ai4j/blob/master/examples/src/main/java/StructuredOutputExamples.java)
+- [Chat with AI](https://github.com/ai-for-java/ai4j/blob/master/examples/src/main/java/ChatExamples.java)
+- [Ask AI questions based on your document/knowledgebase](https://github.com/ai-for-java/ai4j/blob/master/examples/src/main/java/DocumentQnAExamples.java)
+- [Get structured responses from AI](https://github.com/ai-for-java/ai4j/blob/master/examples/src/main/java/StructuredOutputExamples.java)
 - [Prompts and PromptTemplates](https://github.com/ai-for-java/ai4j/blob/master/examples/src/main/java/PromptTemplateExamples.java)
 
 ## Request features
