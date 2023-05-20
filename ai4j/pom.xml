@@ -39,6 +39,11 @@
             <email>deeplearningdynamo@gmail.com</email>
             <url>https://github.com/deep-learning-dynamo</url>
         </developer>
+        <developer>
+            <id>kuraleta</id>
+            <email>digital.kuraleta@gmail.com</email>
+            <url>https://github.com/kuraleta</url>
+        </developer>
     </developers>
 
     <properties>
