@@ -48,10 +48,10 @@ implementation 'dev.ai4j:ai4j:0.1.0'
 ```
 
 ## See code examples
-- [Chat examples](https://github.com/ai-for-java/ai4j/blob/master/examples/src/main/java/ChatExamples.java)
+- [Chat, ChatFlow and ChatHistory](https://github.com/ai-for-java/ai4j/blob/master/examples/src/main/java/ChatExamples.java)
 - [Chat with your files](https://github.com/ai-for-java/ai4j/blob/master/examples/src/main/java/PdfFileOpenAiPineconeExample.java)
 - [Structured outputs](https://github.com/ai-for-java/ai4j/blob/master/examples/src/main/java/StructuredOutputExamples.java)
-- [Prompt templates](https://github.com/ai-for-java/ai4j/blob/master/examples/src/main/java/PromptTemplateExamples.java)
+- [Prompts and PromptTemplates](https://github.com/ai-for-java/ai4j/blob/master/examples/src/main/java/PromptTemplateExamples.java)
 
 ## Request features
 Please [let us know what features you need](https://github.com/ai-for-java/ai4j/issues/new). 
