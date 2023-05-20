@@ -6,7 +6,7 @@
 
     <groupId>dev.ai4j</groupId>
     <artifactId>examples</artifactId>
-    <version>0.2.1</version>
+    <version>0.3.0-RELEASE</version>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -19,7 +19,7 @@
         <dependency>
             <groupId>dev.ai4j</groupId>
             <artifactId>ai4j</artifactId>
-            <version>0.2.1</version>
+            <version>0.3.0-RELEASE</version>
         </dependency>
 
         <dependency>

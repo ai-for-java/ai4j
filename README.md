@@ -39,13 +39,13 @@ Maven:
 <dependency>
   <groupId>dev.ai4j</groupId>
   <artifactId>ai4j</artifactId>
-  <version>0.2.0</version>
+  <version>0.2.1</version>
 </dependency>
 ```
 
 Gradle:
 ```
-implementation 'dev.ai4j:ai4j:0.2.0'
+implementation 'dev.ai4j:ai4j:0.2.1'
 ```
 
 ## See code examples
