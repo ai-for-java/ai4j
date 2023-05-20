@@ -24,9 +24,9 @@ Java library for smooth integration with AI tools and services.
   - Scrapping web pages
   - Sending E-mails and messages
   - etc
-- Long-term memory for chats and agents
 - Integration with more LLM providers (including local models)
 - Integrations with more vector DBs (including local and in-memory)
+- Long-term memory for chats and agents
 - Automatic Document summarization
 - Loading of multiple Documents from directory
 - Loading Documents via HTTP
