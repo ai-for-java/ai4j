@@ -19,6 +19,8 @@ import static java.util.stream.Collectors.joining;
 
 public class PdfFileOpenAiPineconeExample {
 
+    // TODO FLow
+
     public static void main(String[] args) {
 
         // Load file with information you want to "talk" to LLM about.
@@ -47,7 +49,7 @@ public class PdfFileOpenAiPineconeExample {
         // Store embeddings into Pinecone (vector database) for further search / retrieval.
 
         PineconeDatabase pineconeDatabase = PineconeDatabase.builder()
-                .apiKey(System.getenv("PINECONE_API_KEY"))
+                .apiKey(System.getenv("PINECONE_API_KEY")) // https://app.pinecone.io/organizations/xxx/projects/yyy:zzz/keys
                 .environment("northamerica-northeast1-gcp")
                 .projectName("19a129b")
                 .index("test-s1-1536") // make sure the dimensions of the Pinecone index match the dimensions of the embedding model (1536 for text-embedding-ada-002)
@@ -67,7 +69,7 @@ public class PdfFileOpenAiPineconeExample {
 
         // Create a prompt for LLM that includes original question and found embeddings.
 
-        PromptTemplate promptTemplate = PromptTemplate.from("Using only the information enclosed in triple angle brackets, answer this question: {question} <<<{embeddings}>>>");
+        PromptTemplate promptTemplate = PromptTemplate.from("Using only the information enclosed in triple angle brackets, answer this question: {{question}} <<<{{embeddings}}>>>");
         Map<String, Object> parameters = ImmutableMap.of(
                 "question", question,
                 "embeddings", relatedEmbeddings.stream()

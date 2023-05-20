@@ -19,19 +19,19 @@ public class PromptTest {
 
     @Test
     void should_throw_if_prompt_text_contains_unresolved_parameter() {
-        val promptText = "My name is ${name}.";
+        val promptText = "My name is {{name}}.";
 
         assertThatThrownBy(() -> new Prompt(promptText))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("Found unresolved parameter(s) [name] in prompt 'My name is ${name}.'");
+                .hasMessage("Found unresolved parameter(s) [name] in prompt 'My name is {{name}}.'");
     }
 
     @Test
     void should_throw_if_prompt_text_contains_multiple_unresolved_parameters() {
-        val promptText = "My name is ${first_name} ${second_name}.";
+        val promptText = "My name is {{first_name}} {{second_name}}.";
 
         assertThatThrownBy(() -> new Prompt(promptText))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("Found unresolved parameter(s) [first_name, second_name] in prompt 'My name is ${first_name} ${second_name}.'");
+                .hasMessage("Found unresolved parameter(s) [first_name, second_name] in prompt 'My name is {{first_name}} {{second_name}}.'");
     }
 }

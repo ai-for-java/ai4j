@@ -52,9 +52,7 @@ public class PromptTemplate {
     }
 
     private static void validate(Object parameterValue) {
-        if (parameterValue == null
-                || parameterValue.toString() == null
-                || parameterValue.toString().isEmpty()) {
+        if (parameterValue == null || parameterValue.toString() == null) {
             throw new IllegalArgumentException("Parameter value cannot be null");
         }
     }

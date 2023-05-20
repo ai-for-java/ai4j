@@ -12,7 +12,7 @@ public class StopWatch {
         return new StopWatch(System.currentTimeMillis());
     }
 
-    public int stop() {
-        return (int) (System.currentTimeMillis() - startTime);
+    public int secondsElapsed() {
+        return (int) (System.currentTimeMillis() - startTime) / 1000;
     }
 }

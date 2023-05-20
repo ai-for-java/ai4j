@@ -18,7 +18,7 @@ public class AskDocumentFlow {
 
     private static final OverlappingDocumentSplitter DEFAULT_DOCUMENT_SPLITTER
             = new OverlappingDocumentSplitter(1000, 200);
-    private static final PromptTemplate DEFAULT_PROMPT_TEMPLATE = new PromptTemplate("Using the information delimited by triple angle brackets, answer the question to the best of your ability: ${question} <<<{{information}}>>>");
+    private static final PromptTemplate DEFAULT_PROMPT_TEMPLATE = new PromptTemplate("Using the information delimited by triple angle brackets, answer the question to the best of your ability: {{question}} <<<{{information}}>>>");
 
     private final DocumentLoader documentLoader;
     private final DocumentSplitter documentSplitter;

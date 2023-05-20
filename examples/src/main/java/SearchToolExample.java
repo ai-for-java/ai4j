@@ -9,7 +9,7 @@ public class SearchToolExample {
     public static void main(String[] args) {
 
         SearchTool searchTool = SearchTool.builder()
-                .serpApiKey(System.getenv("SERP_API_KEY"))
+                .serpApiKey(System.getenv("SERP_API_KEY")) // https://serpapi.com/manage-api-key
                 .searchProvider(GOOGLE)
                 .build();
 

@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 @Value
 public class Prompt {
 
-    private static final Pattern PROMPT_TEMPLATE_PARAMETER_PATTERN = Pattern.compile("\\$\\{(.+?)}");
+    private static final Pattern PROMPT_TEMPLATE_PARAMETER_PATTERN = Pattern.compile("\\{\\{(.+?)}}");
 
     String promptText;
 

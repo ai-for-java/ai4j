@@ -1,7 +1,5 @@
 package dev.ai4j.model.chat;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.theokanning.openai.completion.chat.ChatCompletionRequest;
 import com.theokanning.openai.service.OpenAiService;
 import dev.ai4j.model.ModelResponseHandler;
@@ -19,13 +17,12 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static dev.ai4j.model.openai.OpenAiModelName.GPT_3_5_TURBO;
+import static dev.ai4j.utils.Json.toJson;
 import static java.util.stream.Collectors.toList;
 
 public class OpenAiChatModel implements ChatModel {
 
     private static final Logger log = LoggerFactory.getLogger(OpenAiChatModel.class);
-
-    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
     private static final double DEFAULT_TEMPERATURE = 0.7;
     private static final Duration DEFAULT_TIMEOUT = Duration.ofSeconds(60);
@@ -77,17 +74,17 @@ public class OpenAiChatModel implements ChatModel {
                 .build();
 
         if (log.isDebugEnabled()) {
-            val json = GSON.toJson(chatCompletionRequest);
+            val json = toJson(chatCompletionRequest);
             log.debug("Sending to OpenAI:\n{}", json);
         }
         val sw = StopWatch.start();
 
         val chatCompletionResult = getNextOpenAiService().createChatCompletion(chatCompletionRequest);
 
-        val latency = sw.stop();
+        val secondsElapsed = sw.secondsElapsed();
         if (log.isDebugEnabled()) {
-            val json = GSON.toJson(chatCompletionResult);
-            log.debug("Received from OpenAI in {} ms:\n{}", latency, json);
+            val json = toJson(chatCompletionResult);
+            log.debug("Received from OpenAI in {} seconds:\n{}", secondsElapsed, json);
         }
 
         return fromOpenAiMessage(chatCompletionResult.getChoices().get(0).getMessage());
