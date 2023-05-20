@@ -10,6 +10,8 @@ Java library for smooth integration with AI tools and services.
 - [Chat History](https://github.com/ai-for-java/ai4j/blob/master/examples/src/main/java/ChatExamples.java) (convenient short-term memory for conversations with AI)
 - [Chat Flow](https://github.com/ai-for-java/ai4j/blob/master/examples/src/main/java/ChatExamples.java) (the most simple way to chat with AI, keeping history)
 - Integration with [Pinecone](https://docs.pinecone.io/docs/overview) vector database (embeddings)
+- Structured outputs
+- Prompt templates
 - Parsing and loading documents:
   - Text
   - PDF
@@ -46,8 +48,10 @@ implementation 'dev.ai4j:ai4j:0.1.0'
 ```
 
 ## See code examples
-- [OpenAI (ChatGPT) Chat API example](https://github.com/ai-for-java/ai4j/blob/master/examples/src/main/java/ChatExamples.java)
-- [Chat with your files using OpenAI (ChatGPT) and Pinecone (embeddings)](https://github.com/ai-for-java/ai4j/blob/master/examples/src/main/java/PdfFileOpenAiPineconeExample.java)
+- [Chat examples](https://github.com/ai-for-java/ai4j/blob/master/examples/src/main/java/ChatExamples.java)
+- [Chat with your files](https://github.com/ai-for-java/ai4j/blob/master/examples/src/main/java/PdfFileOpenAiPineconeExample.java)
+- [Structured outputs](https://github.com/ai-for-java/ai4j/blob/master/examples/src/main/java/StructuredOutputExamples.java)
+- [Prompt templates](https://github.com/ai-for-java/ai4j/blob/master/examples/src/main/java/PromptTemplateExamples.java)
 
 ## Request features
 Please [let us know what features you need](https://github.com/ai-for-java/ai4j/issues/new). 
