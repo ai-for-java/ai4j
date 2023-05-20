@@ -8,13 +8,14 @@ import dev.ai4j.model.chat.ChatModel;
 import dev.ai4j.model.embedding.Embedding;
 import dev.ai4j.model.embedding.EmbeddingModel;
 import dev.ai4j.model.embedding.VectorDatabase;
+import dev.ai4j.prompt.Prompt;
 import dev.ai4j.prompt.PromptTemplate;
 import lombok.Builder;
 import lombok.val;
 
 import static java.util.stream.Collectors.joining;
 
-public class AskDocumentFlow {
+public class ChatWithDocumentFlow {
 
     private static final OverlappingDocumentSplitter DEFAULT_DOCUMENT_SPLITTER
             = new OverlappingDocumentSplitter(1000, 200);
@@ -26,16 +27,15 @@ public class AskDocumentFlow {
     private final VectorDatabase vectorDatabase;
     private final PromptTemplate promptTemplate;
     private final ChatFlow chatFlow;
-    // TODO prompt template?
 
     @Builder
-    public AskDocumentFlow(DocumentLoader documentLoader,
-                           DocumentSplitter documentSplitter,
-                           EmbeddingModel embeddingModel, // TODO provide possibility to use same openapi key
-                           VectorDatabase vectorDatabase,
-                           PromptTemplate promptTemplate,
-                           ChatModel chatModel,
-                           ChatHistory chatHistory) {
+    public ChatWithDocumentFlow(DocumentLoader documentLoader,
+                                DocumentSplitter documentSplitter,
+                                EmbeddingModel embeddingModel, // TODO provide possibility to use same openapi key
+                                VectorDatabase vectorDatabase,
+                                PromptTemplate promptTemplate,
+                                ChatModel chatModel,
+                                ChatHistory chatHistory) {
         this.documentLoader = documentLoader;
         this.documentSplitter = documentSplitter == null ? DEFAULT_DOCUMENT_SPLITTER : documentSplitter;
         this.embeddingModel = embeddingModel;
@@ -65,7 +65,7 @@ public class AskDocumentFlow {
                 .map(Embedding::getContent)
                 .collect(joining(" "));
 
-        val prompt = promptTemplate.buildPrompt()
+        val prompt = Prompt.from(promptTemplate)
                 .with("question", question)
                 .with("information", concatenatedEmbeddings)
                 .build();

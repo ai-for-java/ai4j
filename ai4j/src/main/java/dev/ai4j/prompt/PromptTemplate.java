@@ -34,10 +34,6 @@ public class PromptTemplate {
         return Prompt.of(replaceAll(template, parameterName, parameterValue));
     }
 
-    public Prompt.Builder buildPrompt() {
-        return Prompt.from(this);
-    }
-
     private static String replaceAll(String template, String parameterName, Object parameterValue) {
         validate(parameterName);
         validate(parameterValue);

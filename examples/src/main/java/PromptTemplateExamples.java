@@ -22,9 +22,7 @@ public class PromptTemplateExamples {
 
         public static void main(String[] args) {
 
-            PromptTemplate promptTemplate = PromptTemplate.from("""
-                    Hi, my name is {{name}}.
-                    """);
+            PromptTemplate promptTemplate = PromptTemplate.from("Hi, my name is {{name}}.");
 
             Prompt prompt = promptTemplate.apply("name", "John");
 
@@ -36,9 +34,7 @@ public class PromptTemplateExamples {
 
         public static void main(String[] args) {
 
-            PromptTemplate promptTemplate = PromptTemplate.from("""
-                    Hi, my name is {{name}}. I am {{age}} years old.
-                    """);
+            PromptTemplate promptTemplate = PromptTemplate.from("Hi, my name is {{name}}. I am {{age}} years old.");
 
             Prompt prompt = promptTemplate.apply(Map.of(
                     "name", "John",

@@ -7,6 +7,7 @@ import dev.ai4j.model.completion.OpenAiCompletionModel;
 import dev.ai4j.model.embedding.Embedding;
 import dev.ai4j.model.embedding.OpenAiEmbeddingModel;
 import dev.ai4j.model.embedding.PineconeDatabase;
+import dev.ai4j.prompt.Prompt;
 import dev.ai4j.prompt.PromptTemplate;
 
 import java.util.Collection;
@@ -23,7 +24,7 @@ public class PdfFileOpenAiPineconeExample {
 
     public static void main(String[] args) {
 
-        // Load file with information you want to "talk" to LLM about.
+        // Load file with information you want to "chat" with LLM about.
         // Currently, text and PDF files are supported.
 
         String absolutePathToPdfFile = System.getProperty("user.dir") + "/examples/src/main/java/large-language-models.pdf";
@@ -31,13 +32,13 @@ public class PdfFileOpenAiPineconeExample {
         Document fullPdfDocument = pdfFileLoader.load();
 
 
-        // Split the file into small chunks of 200 characters each with an overlap of 40 characters.
+        // Split the file into small chunks of 200 characters each with an overlap of 40 characters
 
         DocumentSplitter splitter = new OverlappingDocumentSplitter(200, 40);
         List<Document> pdfDocumentChunks = splitter.split(fullPdfDocument);
 
 
-        // Convert chunks into embeddings (semantic vectors).
+        // Convert chunks into embeddings (semantic vectors)
 
         OpenAiEmbeddingModel openAiEmbeddings = OpenAiEmbeddingModel.builder()
                 .apiKey(System.getenv("OPENAI_API_KEY")) // https://platform.openai.com/account/api-keys
@@ -46,7 +47,7 @@ public class PdfFileOpenAiPineconeExample {
         Collection<Embedding> embeddings = openAiEmbeddings.embed(pdfDocumentChunks);
 
 
-        // Store embeddings into Pinecone (vector database) for further search / retrieval.
+        // Store embeddings into vector DB for further search / retrieval
 
         PineconeDatabase pineconeDatabase = PineconeDatabase.builder()
                 .apiKey(System.getenv("PINECONE_API_KEY")) // https://app.pinecone.io/organizations/xxx/projects/yyy:zzz/keys
@@ -57,37 +58,37 @@ public class PdfFileOpenAiPineconeExample {
         pineconeDatabase.persist(embeddings);
 
 
-        // Define the question you want to ask LLM.
+        // Define the question you want to ask LLM
 
         String question = "How many parameters does GPT-3 have?";
 
 
-        // Find related embeddings in Pinecone (by semantic similarity).
+        // Find relevant embeddings in vector DB by semantic similarity
 
         Embedding embeddingForQuestion = openAiEmbeddings.embed(question);
         Collection<Embedding> relatedEmbeddings = pineconeDatabase.findRelated(embeddingForQuestion);
 
-        // Create a prompt for LLM that includes original question and found embeddings.
 
-        PromptTemplate promptTemplate = PromptTemplate.from("Using only the information enclosed in triple angle brackets, answer this question: {{question}} <<<{{embeddings}}>>>");
-        Map<String, Object> parameters = ImmutableMap.of(
-                "question", question,
-                "embeddings", relatedEmbeddings.stream()
-                        .map(Embedding::getContent)
-                        .collect(joining("\n\n"))
-        );
+        // Create a prompt for LLM that includes original question and relevant embeddings
+
+        Prompt prompt = Prompt.from("""
+                Using only the information enclosed in triple angle brackets, answer this question: {{question}} <<<{{embeddings}}>>>
+                """)
+                .with("question", question)
+                .with("embeddings", relatedEmbeddings.stream().map(Embedding::getContent).collect(joining("\n\n")))
+                .build();
 
 
-        // Send formatted prompt to LLM.
+        // Send prompt to LLM
 
         OpenAiCompletionModel openAiLanguageModel = OpenAiCompletionModel.builder()
                 .apiKey(System.getenv("OPENAI_API_KEY")) // https://platform.openai.com/account/api-keys
                 .modelName(GPT_3_5_TURBO)
                 .build();
-        String answer = openAiLanguageModel.complete(promptTemplate.apply(parameters));
+        String answer = openAiLanguageModel.complete(prompt);
 
 
-        // See an answer from LLM.
+        // See an answer from LLM
 
         System.out.println(answer);
     }
