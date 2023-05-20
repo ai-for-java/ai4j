@@ -8,10 +8,11 @@ Java library for smooth integration with AI tools and services.
   - [Completions](https://platform.openai.com/docs/guides/completion)
   - [Embeddings](https://platform.openai.com/docs/guides/embeddings)
 - [Chat History](https://github.com/ai-for-java/ai4j/blob/master/examples/src/main/java/ChatExamples.java) (convenient short-term memory for conversations with AI)
-- [Chat Flow](https://github.com/ai-for-java/ai4j/blob/master/examples/src/main/java/ChatExamples.java) (the most simple way to chat with AI, keeping history)
+- [Chat Flow](https://github.com/ai-for-java/ai4j/blob/master/examples/src/main/java/ChatExamples.java) (easy way to chat with AI while keeping history)
+- [Document QnA Flow](https://github.com/ai-for-java/ai4j/blob/master/examples/src/main/java/DocumentQnAExamples.java) (easy way to ask AI questions based on specific document/knowledgebase)
 - Integration with [Pinecone](https://docs.pinecone.io/docs/overview) vector database (embeddings)
-- Structured outputs
-- Prompt templates
+- [Structured outputs](https://github.com/ai-for-java/ai4j/blob/master/examples/src/main/java/StructuredOutputExamples.java) (get responses from LLM with a strict structure)
+- [Prompt templates](https://github.com/ai-for-java/ai4j/blob/master/examples/src/main/java/PromptTemplateExamples.java)
 - Parsing and loading documents:
   - Text
   - PDF
@@ -50,7 +51,7 @@ implementation 'dev.ai4j:ai4j:0.2.1'
 
 ## See code examples
 - [Chat, ChatFlow and ChatHistory](https://github.com/ai-for-java/ai4j/blob/master/examples/src/main/java/ChatExamples.java)
-- [Chat with your files](https://github.com/ai-for-java/ai4j/blob/master/examples/src/main/java/PdfFileOpenAiPineconeExample.java)
+- [Chat with your files](https://github.com/ai-for-java/ai4j/blob/master/examples/src/main/java/DocumentQnAExamples.java)
 - [Structured outputs](https://github.com/ai-for-java/ai4j/blob/master/examples/src/main/java/StructuredOutputExamples.java)
 - [Prompts and PromptTemplates](https://github.com/ai-for-java/ai4j/blob/master/examples/src/main/java/PromptTemplateExamples.java)
 
