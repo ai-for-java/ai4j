@@ -24,7 +24,7 @@ public class PromptTemplateExamples {
 
             PromptTemplate promptTemplate = PromptTemplate.from("Hi, my name is {{name}}.");
 
-            Prompt prompt = promptTemplate.apply("name", "John");
+            Prompt prompt = promptTemplate.with("name", "John");
 
             System.out.println(prompt);
         }
@@ -36,7 +36,7 @@ public class PromptTemplateExamples {
 
             PromptTemplate promptTemplate = PromptTemplate.from("Hi, my name is {{name}}. I am {{age}} years old.");
 
-            Prompt prompt = promptTemplate.apply(Map.of(
+            Prompt prompt = promptTemplate.with(Map.of(
                     "name", "John",
                     "age", 35
             ));

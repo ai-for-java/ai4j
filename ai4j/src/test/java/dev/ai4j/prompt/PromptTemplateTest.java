@@ -13,7 +13,7 @@ class PromptTemplateTest {
     void should_create_prompt_from_template_with_one_parameter() {
         val promptTemplate = new PromptTemplate("My name is {{name}}.");
 
-        val prompt = promptTemplate.apply("name", "Klaus");
+        val prompt = promptTemplate.with("name", "Klaus");
 
         assertThat(prompt.getPrompt()).isEqualTo("My name is Klaus.");
     }
@@ -22,7 +22,7 @@ class PromptTemplateTest {
     void should_create_prompt_from_template_with_multiple_parameters() {
         val promptTemplate = new PromptTemplate("My name is {{name}} {{surname}}.");
 
-        val prompt = promptTemplate.apply(ImmutableMap.of(
+        val prompt = promptTemplate.with(ImmutableMap.of(
                 "name", "Klaus",
                 "surname", "Heißler"
         ));
@@ -34,7 +34,7 @@ class PromptTemplateTest {
     void should_throw_when_parameter_is_unknown() {
         val promptTemplate = new PromptTemplate("My name is {{name}}.");
 
-        assertThatThrownBy(() -> promptTemplate.apply("banana", "banana"))
+        assertThatThrownBy(() -> promptTemplate.with("banana", "banana"))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("There is no parameter 'banana' in prompt template 'My name is {{name}}.'");
     }

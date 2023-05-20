@@ -16,7 +16,7 @@ public class PromptTemplate {
         this.template = template;
     }
 
-    public Prompt apply(Map<String, Object> parameters) {
+    public Prompt with(Map<String, Object> parameters) {
         var prompt = template;
 
         if (parameters == null || parameters.isEmpty()) {
@@ -30,7 +30,7 @@ public class PromptTemplate {
         return Prompt.of(prompt);
     }
 
-    public Prompt apply(String parameterName, Object parameterValue) {
+    public Prompt with(String parameterName, Object parameterValue) {
         return Prompt.of(replaceAll(template, parameterName, parameterValue));
     }
 

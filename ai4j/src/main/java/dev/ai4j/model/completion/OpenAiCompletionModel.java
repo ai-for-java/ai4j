@@ -90,7 +90,7 @@ public class OpenAiCompletionModel implements CompletionModel {
                 .map(example -> String.format("For example:\n%s\n\n", example))
                 .orElse(""));
 
-        val completion = complete(promptTemplate.apply(params));
+        val completion = complete(promptTemplate.with(params));
 
         val jsonElements = parse(completion);
 

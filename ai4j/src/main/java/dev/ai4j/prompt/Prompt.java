@@ -48,7 +48,7 @@ public class Prompt {
         }
 
         public Prompt build() {
-            return promptTemplate.apply(parameters);
+            return promptTemplate.with(parameters);
         }
     }
 
