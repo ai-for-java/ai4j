@@ -27,15 +27,15 @@ public class PromptTemplate {
             prompt = replaceAll(prompt, entry.getKey(), entry.getValue().toString());
         }
 
-        return Prompt.from(prompt);
+        return Prompt.of(prompt);
     }
 
     public Prompt apply(String parameterName, Object parameterValue) {
-        return Prompt.from(replaceAll(template, parameterName, parameterValue));
+        return Prompt.of(replaceAll(template, parameterName, parameterValue));
     }
 
     public Prompt.Builder buildPrompt() {
-        return Prompt.buildFrom(this);
+        return Prompt.from(this);
     }
 
     private static String replaceAll(String template, String parameterName, Object parameterValue) {

@@ -14,7 +14,7 @@ public class PromptTest {
 
         val prompt = new Prompt(promptText);
 
-        assertThat(prompt.getPromptText()).isEqualTo(promptText);
+        assertThat(prompt.getPrompt()).isEqualTo(promptText);
     }
 
     @Test

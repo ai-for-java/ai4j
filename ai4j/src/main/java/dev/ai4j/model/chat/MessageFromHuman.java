@@ -13,7 +13,7 @@ public class MessageFromHuman extends ChatMessage {
     }
 
     public static MessageFromHuman of(Prompt prompt) {
-        return new MessageFromHuman(prompt.getPromptText());
+        return new MessageFromHuman(prompt.getPrompt());
     }
 
     public static MessageFromHuman messageFromHuman(String contents) {
@@ -21,6 +21,6 @@ public class MessageFromHuman extends ChatMessage {
     }
 
     public static MessageFromHuman messageFromHuman(Prompt prompt) {
-        return of(prompt.getPromptText());
+        return of(prompt.getPrompt());
     }
 }

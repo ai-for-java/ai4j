@@ -51,7 +51,7 @@ public class OpenAiCompletionModel implements CompletionModel {
 
     @Override
     public String complete(Prompt prompt) {
-        return complete(prompt.getPromptText());
+        return complete(prompt.getPrompt());
     }
 
     @Override

@@ -14,19 +14,23 @@ public class Prompt {
 
     private static final Pattern PROMPT_TEMPLATE_PARAMETER_PATTERN = Pattern.compile("\\{\\{(.+?)}}");
 
-    String promptText;
+    String prompt;
 
-    public Prompt(String promptText) {
-        verifyAllParametersResolved(promptText);
-        this.promptText = promptText;
+    public Prompt(String prompt) {
+        verifyAllParametersResolved(prompt);
+        this.prompt = prompt;
     }
 
-    public static Prompt from(String text) {
-        return new Prompt(text);
+    public static Prompt of(String prompt) {
+        return new Prompt(prompt);
     }
 
-    public static Builder buildFrom(PromptTemplate promptTemplate) {
+    public static Builder from(PromptTemplate promptTemplate) {
         return new Builder(promptTemplate);
+    }
+
+    public static Builder from(String promptTemplate) {
+        return new Builder(PromptTemplate.from(promptTemplate));
     }
 
     public static class Builder {
@@ -58,7 +62,7 @@ public class Prompt {
         }
     }
 
-    public static List<String> getUnresolvedParameterNames(String prompt) {
+    private static List<String> getUnresolvedParameterNames(String prompt) {
         val unresolvedParameterNames = new ArrayList<String>();
         val matcher = PROMPT_TEMPLATE_PARAMETER_PATTERN.matcher(prompt);
 
@@ -67,5 +71,10 @@ public class Prompt {
         }
 
         return unresolvedParameterNames;
+    }
+
+    @Override
+    public String toString() {
+        return prompt;
     }
 }

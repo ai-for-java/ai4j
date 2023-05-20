@@ -13,7 +13,7 @@ public class MessageFromSystem extends ChatMessage {
     }
 
     public static MessageFromSystem of(Prompt prompt) {
-        return new MessageFromSystem(prompt.getPromptText());
+        return new MessageFromSystem(prompt.getPrompt());
     }
 
     public static MessageFromSystem messageFromSystem(String contents) {
@@ -21,6 +21,6 @@ public class MessageFromSystem extends ChatMessage {
     }
 
     public static MessageFromSystem messageFromSystem(Prompt prompt) {
-        return of(prompt.getPromptText());
+        return of(prompt.getPrompt());
     }
 }

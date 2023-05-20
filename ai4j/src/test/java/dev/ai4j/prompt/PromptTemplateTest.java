@@ -4,8 +4,6 @@ import com.google.common.collect.ImmutableMap;
 import lombok.val;
 import org.junit.jupiter.api.Test;
 
-import java.util.HashMap;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -17,7 +15,7 @@ class PromptTemplateTest {
 
         val prompt = promptTemplate.apply("name", "Klaus");
 
-        assertThat(prompt.getPromptText()).isEqualTo("My name is Klaus.");
+        assertThat(prompt.getPrompt()).isEqualTo("My name is Klaus.");
     }
 
     @Test
@@ -29,7 +27,7 @@ class PromptTemplateTest {
                 "surname", "Heißler"
         ));
 
-        assertThat(prompt.getPromptText()).isEqualTo("My name is Klaus Heißler.");
+        assertThat(prompt.getPrompt()).isEqualTo("My name is Klaus Heißler.");
     }
 
     @Test

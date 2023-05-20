@@ -4,7 +4,7 @@ import dev.ai4j.model.completion.structured.Example;
 
 import java.util.List;
 
-public class StructuredOutputExample {
+public class StructuredOutputExamples {
 
     static class GetOneStructuredOutput {
 

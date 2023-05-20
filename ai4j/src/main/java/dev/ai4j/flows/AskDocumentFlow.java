@@ -70,6 +70,6 @@ public class AskDocumentFlow {
                 .with("information", concatenatedEmbeddings)
                 .build();
 
-        return chatFlow.humanSaid(prompt.getPromptText());
+        return chatFlow.humanSaid(prompt.getPrompt());
     }
 }

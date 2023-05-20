@@ -13,7 +13,7 @@ public class MessageFromAi extends ChatMessage {
     }
 
     public static MessageFromAi of(Prompt prompt) {
-        return new MessageFromAi(prompt.getPromptText());
+        return new MessageFromAi(prompt.getPrompt());
     }
 
     public static MessageFromAi messageFromAi(String contents) {
@@ -21,6 +21,6 @@ public class MessageFromAi extends ChatMessage {
     }
 
     public static MessageFromAi messageFromAi(Prompt prompt) {
-        return of(prompt.getPromptText());
+        return of(prompt.getPrompt());
     }
 }
