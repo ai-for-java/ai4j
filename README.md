@@ -18,14 +18,15 @@ Java library for smooth integration with AI tools and services.
 - Splitting big documents into overlapping chunks
 - Tokenizer (tokenize/detokenize, count tokens)
 
-Coming soon:
+## Coming soon:
 - Powerful autonomous agents that can use tools:
   - Searching the internet for up-to-date information
   - Scrapping web pages
+  - Sending E-mails and messages
   - etc
 - Long-term memory for chats and agents
-- More integrations with different LLM providers
-- More integrations with different vector DBs
+- Integration with more LLM providers (including local models)
+- Integrations with more vector DBs (including local and in-memory)
 - Automatic Document summarization
 - Loading of multiple Documents from directory
 - Loading Documents via HTTP
