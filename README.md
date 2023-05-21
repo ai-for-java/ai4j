@@ -1,4 +1,6 @@
 # AI4J: Supercharge your Java application with the power of AI
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fai-for-java%2Fai4j.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fai-for-java%2Fai4j?ref=badge_shield)
+
 
 Java library for smooth integration with AI tools and services.
 
@@ -82,3 +84,7 @@ Here are some best practices for using LLMs:
 - Provide examples. Sometimes it is best to show LLM a few examples of what you want instead of trying to explain it.
 - Ask LLM to provide structured output (JSON, XML, etc). This way you can parse response more easily and distinguish different parts of it.
 - Use unusual delimiters, such as \```triple backticks``` and \<<<triple angle brackets\>>> to help the LLM distinguish data or input from instructions.
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fai-for-java%2Fai4j.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fai-for-java%2Fai4j?ref=badge_large)
