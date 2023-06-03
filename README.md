@@ -87,3 +87,8 @@ Here are some best practices for using LLMs:
 - Provide examples. Sometimes it is best to show LLM a few examples of what you want instead of trying to explain it.
 - Ask LLM to provide structured output (JSON, XML, etc). This way you can parse response more easily and distinguish different parts of it.
 - Use unusual delimiters, such as \```triple backticks``` and \<<<triple angle brackets\>>> to help the LLM distinguish data or input from instructions.
+
+## Useful materials
+Text version of above course: https://platform.openai.com/docs/guides/gpt-best-practices
+How to build software powered by OpenAI/ChatGPT: https://www.deeplearning.ai/short-courses/building-systems-with-chatgpt/
+Cookbook with examples of how to use OpenAI API: https://github.com/openai/openai-cookbook
