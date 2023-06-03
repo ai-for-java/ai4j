@@ -1,6 +1,7 @@
 package dev.ai4j.document.splitter;
 
 import dev.ai4j.document.Document;
+import dev.ai4j.document.DocumentSplitter;
 import lombok.Builder;
 import lombok.val;
 import lombok.var;
@@ -21,11 +22,11 @@ public class OverlappingDocumentSplitter implements DocumentSplitter {
 
     @Override
     public List<Document> split(Document document) {
-        if (document.getContents() == null || document.getContents().isEmpty()) {
+        if (document.contents() == null || document.contents().isEmpty()) {
             throw new IllegalArgumentException("Document content should not be null or empty");
         }
 
-        val contents = document.getContents();
+        val contents = document.contents();
         val contentLength = contents.length();
 
         if (chunkSize <= 0 || chunkOverlap < 0 || chunkSize <= chunkOverlap) {

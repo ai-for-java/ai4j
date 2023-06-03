@@ -1,7 +1,8 @@
 package dev.ai4j.model.embedding;
 
 import dev.ai4j.document.Document;
-import dev.ai4j.model.openai.OpenAiModelName;
+import dev.ai4j.embedding.Embedding;
+import dev.ai4j.embedding.EmbeddingModel;
 import dev.ai4j.openai4j.OpenAiClient;
 import dev.ai4j.openai4j.embedding.EmbeddingRequest;
 import lombok.Builder;
@@ -21,10 +22,10 @@ public class OpenAiEmbeddingModel implements EmbeddingModel {
     private static final Duration DEFAULT_TIMEOUT = Duration.ofSeconds(60);
 
     private final OpenAiClient client;
-    private final OpenAiModelName modelName;
+    private final String modelName;
 
     @Builder
-    public OpenAiEmbeddingModel(String apiKey, OpenAiModelName modelName, Duration timeout) {
+    public OpenAiEmbeddingModel(String apiKey, String modelName, Duration timeout) {
         this.client = OpenAiClient.builder()
                 .apiKey(apiKey)
                 .timeout(timeout == null ? DEFAULT_TIMEOUT : timeout)
@@ -45,12 +46,12 @@ public class OpenAiEmbeddingModel implements EmbeddingModel {
     @Override
     public Collection<Embedding> embed(Collection<Document> documents) {
         val documentContents = documents.stream()
-                .map(Document::getContents)
+                .map(Document::contents)
                 .collect(toList());
 
         val embeddingRequest = EmbeddingRequest.builder()
                 .input(documentContents) // TODO handle newlines ?
-                .model(modelName.getId())
+                .model(modelName)
                 .build();
 
         val openAiEmbeddings = client.embedding(embeddingRequest).execute().data();

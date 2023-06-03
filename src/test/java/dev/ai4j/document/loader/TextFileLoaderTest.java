@@ -3,7 +3,7 @@ package dev.ai4j.document.loader;
 import lombok.val;
 import org.junit.jupiter.api.Test;
 
-import java.io.FileNotFoundException;
+import java.nio.file.NoSuchFileException;
 
 import static java.nio.charset.StandardCharsets.ISO_8859_1;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -20,7 +20,7 @@ class TextFileLoaderTest {
 
         val document = loader.load();
 
-        assertThat(document.getContents()).isEqualTo("test\ncontent");
+        assertThat(document.contents()).isEqualTo("test\ncontent");
     }
 
     @Test
@@ -33,7 +33,7 @@ class TextFileLoaderTest {
 
         val document = loader.load();
 
-        assertThat(document.getContents()).isEqualTo("test\ncontent");
+        assertThat(document.contents()).isEqualTo("test\ncontent");
     }
 
     @Test
@@ -43,6 +43,6 @@ class TextFileLoaderTest {
                 .absolutePathToTextFile(System.getProperty("user.dir") + "banana")
                 .build();
 
-        assertThatThrownBy(loader::load).isInstanceOf(FileNotFoundException.class);
+        assertThatThrownBy(loader::load).isInstanceOf(NoSuchFileException.class);
     }
 }

@@ -1,16 +1,20 @@
 package dev.ai4j.flows;
 
-import dev.ai4j.document.loader.DocumentLoader;
-import dev.ai4j.document.splitter.DocumentSplitter;
+import dev.ai4j.PromptTemplate;
+import dev.ai4j.chat.ChatModel;
+import dev.ai4j.document.Document;
+import dev.ai4j.document.DocumentLoader;
+import dev.ai4j.document.DocumentSplitter;
 import dev.ai4j.document.splitter.OverlappingDocumentSplitter;
-import dev.ai4j.model.completion.CompletionModel;
-import dev.ai4j.model.embedding.Embedding;
-import dev.ai4j.model.embedding.EmbeddingModel;
-import dev.ai4j.model.embedding.VectorDatabase;
-import dev.ai4j.prompt.Prompt;
-import dev.ai4j.prompt.PromptTemplate;
+import dev.ai4j.embedding.Embedding;
+import dev.ai4j.embedding.EmbeddingModel;
+import dev.ai4j.embedding.VectorDatabase;
 import lombok.Builder;
-import lombok.val;
+
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static java.util.stream.Collectors.joining;
 
@@ -25,7 +29,7 @@ public class DocumentQnAFlow {
     private final EmbeddingModel embeddingModel;
     private final VectorDatabase vectorDatabase;
     private final PromptTemplate promptTemplate;
-    private final CompletionModel completionModel;
+    private final ChatModel chatModel;
 
     @Builder
     public DocumentQnAFlow(DocumentLoader documentLoader,
@@ -33,38 +37,39 @@ public class DocumentQnAFlow {
                            EmbeddingModel embeddingModel, // TODO provide possibility to use same openapi key
                            VectorDatabase vectorDatabase,
                            PromptTemplate promptTemplate,
-                           CompletionModel completionModel) {
+                           ChatModel chatModel) {
         this.documentLoader = documentLoader;
         this.documentSplitter = documentSplitter == null ? DEFAULT_DOCUMENT_SPLITTER : documentSplitter;
         this.embeddingModel = embeddingModel;
         this.vectorDatabase = vectorDatabase;
         this.promptTemplate = promptTemplate == null ? DEFAULT_PROMPT_TEMPLATE : promptTemplate;
-        this.completionModel = completionModel;
+        this.chatModel = chatModel;
 
         init();
     }
 
     private void init() {
-        val document = documentLoader.load();
-        val chunks = documentSplitter.split(document);
-        val embeddings = embeddingModel.embed(chunks);
+        Document document = documentLoader.load();
+        List<Document> chunks = documentSplitter.split(document);
+        Collection<Embedding> embeddings = embeddingModel.embed(chunks);
         vectorDatabase.persist(embeddings);
     }
 
     public String ask(String question) {
-        val questionEmbedding = embeddingModel.embed(question);
+        Embedding questionEmbedding = embeddingModel.embed(question);
 
-        val relatedEmbeddings = vectorDatabase.findRelated(questionEmbedding);
+        List<Embedding> relatedEmbeddings = vectorDatabase.findRelated(questionEmbedding, 5); // TODO defaults
 
-        val concatenatedEmbeddings = relatedEmbeddings.stream()
-                .map(Embedding::getContent)
+        String concatenatedEmbeddings = relatedEmbeddings.stream()
+                .map(Embedding::contents)
                 .collect(joining(" "));
 
-        val prompt = Prompt.from(promptTemplate)
-                .with("question", question)
-                .with("information", concatenatedEmbeddings)
-                .build();
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("question", question);
+        parameters.put("information", concatenatedEmbeddings);
 
-        return completionModel.complete(prompt);
+        String prompt = promptTemplate.format(parameters);
+
+        return chatModel.chat(prompt);
     }
 }

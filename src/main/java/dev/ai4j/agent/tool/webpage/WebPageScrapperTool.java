@@ -1,6 +1,6 @@
 package dev.ai4j.agent.tool.webpage;
 
-import dev.ai4j.agent.tool.Tool;
+import dev.ai4j.agent.Tool;
 import lombok.val;
 import org.jsoup.Jsoup;
 

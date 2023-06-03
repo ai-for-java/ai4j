@@ -1,5 +1,9 @@
 package dev.ai4j.model.chat;
 
+import dev.ai4j.chat.ChatHistory;
+import dev.ai4j.chat.ChatMessage;
+import dev.ai4j.chat.SystemMessage;
+import dev.ai4j.chat.UserMessage;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import lombok.var;
@@ -15,13 +19,13 @@ public class SimpleChatHistory implements ChatHistory {
     // safety net to limit the cost in case user did not define it himself
     private static final int DEFAULT_CAPACITY_IN_TOKENS = 200;
 
-    private final Optional<MessageFromSystem> maybeMessageFromSystem;
+    private final Optional<SystemMessage> maybeMessageFromSystem;
     private final LinkedList<ChatMessage> previousMessages;
     private final Integer capacityInTokens;
     private final Integer capacityInMessages;
 
     private SimpleChatHistory(Builder builder) {
-        this.maybeMessageFromSystem = builder.maybeMessageFromSystem;
+        this.maybeMessageFromSystem = builder.maybeSystemMessage;
         this.previousMessages = builder.previousMessages;
         this.capacityInTokens = builder.capacityInTokens;
         this.capacityInMessages = builder.capacityInMessages;
@@ -35,7 +39,7 @@ public class SimpleChatHistory implements ChatHistory {
     }
 
     @Override
-    public List<ChatMessage> getHistory() {
+    public List<ChatMessage> history() {
         val messages = new ArrayList<ChatMessage>();
         maybeMessageFromSystem.ifPresent(messages::add);
         messages.addAll(previousMessages);
@@ -51,12 +55,14 @@ public class SimpleChatHistory implements ChatHistory {
 
             val oldestMessage = previousMessages.removeFirst();
 
-            log.debug("Removing the oldest message from {} '{}' ({} tokens) to comply with capacity requirements",
-                    oldestMessage instanceof MessageFromHuman ? "human" : "AI",
-                    oldestMessage.getContents(),
-                    oldestMessage.getNumberOfTokens());
+            // remove all mentions of human, messageFrom
 
-            currentNumberOfTokensInHistory -= oldestMessage.getNumberOfTokens();
+            log.debug("Removing the oldest message from {} '{}' ({} tokens) to comply with capacity requirements",
+                    oldestMessage instanceof UserMessage ? "user" : "AI",
+                    oldestMessage.contents(),
+                    oldestMessage.numberOfTokens());
+
+            currentNumberOfTokensInHistory -= oldestMessage.numberOfTokens();
             currentNumberOfMessagesInHistory--;
         }
 
@@ -64,9 +70,9 @@ public class SimpleChatHistory implements ChatHistory {
     }
 
     private int getCurrentNumberOfTokens() {
-        val numberOfTokensInSystemMessage = maybeMessageFromSystem.map(ChatMessage::getNumberOfTokens).orElse(0);
+        val numberOfTokensInSystemMessage = maybeMessageFromSystem.map(ChatMessage::numberOfTokens).orElse(0);
         val numberOfTokensInPreviousMessages = previousMessages.stream()
-                .map(ChatMessage::getNumberOfTokens)
+                .map(ChatMessage::numberOfTokens)
                 .reduce(0, Integer::sum);
         return numberOfTokensInSystemMessage + numberOfTokensInPreviousMessages;
     }
@@ -77,23 +83,23 @@ public class SimpleChatHistory implements ChatHistory {
 
     public static class Builder {
 
-        private Optional<MessageFromSystem> maybeMessageFromSystem = Optional.empty();
+        private Optional<SystemMessage> maybeSystemMessage = Optional.empty();
         private Integer capacityInTokens = DEFAULT_CAPACITY_IN_TOKENS;
         private Integer capacityInMessages;
         private LinkedList<ChatMessage> previousMessages = new LinkedList<>();
 
-        public Builder messageFromSystem(MessageFromSystem messageFromSystem) {
-            this.maybeMessageFromSystem = Optional.ofNullable(messageFromSystem);
+        public Builder systemMessage(SystemMessage systemMessage) {
+            this.maybeSystemMessage = Optional.ofNullable(systemMessage);
             return this;
         }
 
-        public Builder messageFromSystem(String messageFromSystem) {
-            if (messageFromSystem == null) {
-                this.maybeMessageFromSystem = Optional.empty();
+        public Builder systemMessage(String systemMessage) {
+            if (systemMessage == null) {
+                this.maybeSystemMessage = Optional.empty(); // TODO ?
                 return this;
             }
 
-            return messageFromSystem(MessageFromSystem.of(messageFromSystem));
+            return systemMessage(SystemMessage.systemMessage(systemMessage));
         }
 
         public Builder capacityInTokens(Integer capacityInTokens) {

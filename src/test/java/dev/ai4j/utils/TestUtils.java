@@ -1,9 +1,9 @@
 package dev.ai4j.utils;
 
-import dev.ai4j.model.chat.MessageFromAi;
-import dev.ai4j.model.chat.MessageFromHuman;
-import dev.ai4j.model.chat.MessageFromSystem;
-import dev.ai4j.tokenizer.Tokenizer;
+import dev.ai4j.Tokenizer;
+import dev.ai4j.chat.AiMessage;
+import dev.ai4j.chat.SystemMessage;
+import dev.ai4j.chat.UserMessage;
 import lombok.val;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -12,9 +12,9 @@ import org.junit.jupiter.params.provider.ValueSource;
 import java.util.ArrayList;
 import java.util.List;
 
-import static dev.ai4j.model.chat.MessageFromAi.messageFromAi;
-import static dev.ai4j.model.chat.MessageFromHuman.messageFromHuman;
-import static dev.ai4j.model.chat.MessageFromSystem.messageFromSystem;
+import static dev.ai4j.chat.AiMessage.aiMessage;
+import static dev.ai4j.chat.SystemMessage.systemMessage;
+import static dev.ai4j.chat.UserMessage.userMessage;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class TestUtils {
@@ -24,34 +24,34 @@ public class TestUtils {
     @ParameterizedTest
     @ValueSource(ints = {5, 10, 25, 50, 100, 250, 500, 1000})
     void should_create_message_from_system_with_tokens(int numberOfTokens) {
-        val messageFromSystem = messageFromSystemWithTokens(numberOfTokens);
-        assertThat(messageFromSystem.getNumberOfTokens()).isEqualTo(numberOfTokens);
+        val messageFromSystem = systemMessageWithTokens(numberOfTokens);
+        assertThat(messageFromSystem.numberOfTokens()).isEqualTo(numberOfTokens);
     }
 
-    public static MessageFromSystem messageFromSystemWithTokens(int numberOfTokens) {
-        return messageFromSystem(generateTokens(numberOfTokens - EXTRA_TOKENS_PER_CHAT_MESSAGE));
+    public static SystemMessage systemMessageWithTokens(int numberOfTokens) {
+        return systemMessage(generateTokens(numberOfTokens - EXTRA_TOKENS_PER_CHAT_MESSAGE));
     }
 
     @ParameterizedTest
     @ValueSource(ints = {5, 10, 25, 50, 100, 250, 500, 1000})
     void should_create_message_from_human_with_tokens(int numberOfTokens) {
         val messageFromHuman = messageFromHumanWithTokens(numberOfTokens);
-        assertThat(messageFromHuman.getNumberOfTokens()).isEqualTo(numberOfTokens);
+        assertThat(messageFromHuman.numberOfTokens()).isEqualTo(numberOfTokens);
     }
 
-    public static MessageFromHuman messageFromHumanWithTokens(int numberOfTokens) {
-        return messageFromHuman(generateTokens(numberOfTokens - EXTRA_TOKENS_PER_CHAT_MESSAGE));
+    public static UserMessage messageFromHumanWithTokens(int numberOfTokens) {
+        return userMessage(generateTokens(numberOfTokens - EXTRA_TOKENS_PER_CHAT_MESSAGE));
     }
 
     @ParameterizedTest
     @ValueSource(ints = {5, 10, 25, 50, 100, 250, 500, 1000})
     void should_create_message_from_ai_with_tokens(int numberOfTokens) {
-        val messageFromAi = messageFromAiWithTokens(numberOfTokens);
-        assertThat(messageFromAi.getNumberOfTokens()).isEqualTo(numberOfTokens);
+        AiMessage messageFromAi = messageFromAiWithTokens(numberOfTokens);
+        assertThat(messageFromAi.numberOfTokens()).isEqualTo(numberOfTokens);
     }
 
-    public static MessageFromAi messageFromAiWithTokens(int numberOfTokens) {
-        return messageFromAi(generateTokens(numberOfTokens - EXTRA_TOKENS_PER_CHAT_MESSAGE));
+    public static AiMessage messageFromAiWithTokens(int numberOfTokens) {
+        return aiMessage(generateTokens(numberOfTokens - EXTRA_TOKENS_PER_CHAT_MESSAGE));
     }
 
     @ParameterizedTest

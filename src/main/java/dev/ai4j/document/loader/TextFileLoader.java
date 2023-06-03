@@ -1,13 +1,14 @@
 package dev.ai4j.document.loader;
 
-import com.google.common.io.Files;
 import dev.ai4j.document.Document;
+import dev.ai4j.document.DocumentLoader;
 import lombok.Builder;
 import lombok.SneakyThrows;
 import lombok.val;
 
-import java.io.File;
 import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
@@ -25,7 +26,7 @@ public class TextFileLoader implements DocumentLoader {
     @Override
     @SneakyThrows
     public Document load() {
-        val fileContents = Files.asCharSource(new File(absolutePathToTextFile), charset).read();
+        val fileContents = new String(Files.readAllBytes(Paths.get(absolutePathToTextFile)), charset);
         return Document.from(fileContents);
     }
 }

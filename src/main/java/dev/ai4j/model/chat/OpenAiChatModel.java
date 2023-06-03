@@ -1,23 +1,37 @@
 package dev.ai4j.model.chat;
 
-import dev.ai4j.model.ModelResponseHandler;
-import dev.ai4j.model.openai.OpenAiModelName;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonToken;
+import dev.ai4j.PromptTemplate;
+import dev.ai4j.StreamingResponseHandler;
+import dev.ai4j.chat.AiMessage;
+import dev.ai4j.chat.ChatMessage;
+import dev.ai4j.chat.ChatModel;
+import dev.ai4j.chat.UserMessage;
+import dev.ai4j.model.completion.structured.Description;
 import dev.ai4j.openai4j.OpenAiClient;
 import dev.ai4j.openai4j.chat.ChatCompletionRequest;
 import dev.ai4j.openai4j.chat.ChatCompletionResponse;
 import dev.ai4j.openai4j.chat.Message;
 import dev.ai4j.openai4j.chat.Role;
+import dev.ai4j.utils.Json;
 import dev.ai4j.utils.StopWatch;
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
+import lombok.val;
 
+import java.io.StringReader;
 import java.time.Duration;
-import java.util.List;
+import java.util.*;
 
-import static dev.ai4j.model.chat.MessageFromAi.messageFromAi;
+import static dev.ai4j.chat.AiMessage.aiMessage;
+import static dev.ai4j.chat.UserMessage.userMessage;
 import static dev.ai4j.model.openai.OpenAiModelName.GPT_3_5_TURBO;
 import static dev.ai4j.openai4j.chat.Role.*;
-import static dev.ai4j.utils.Json.toJson;
+import static dev.ai4j.utils.Json.*;
+import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
 
 @Slf4j
@@ -27,14 +41,14 @@ public class OpenAiChatModel implements ChatModel { // TODO all models in one "s
     private static final Duration DEFAULT_TIMEOUT = Duration.ofSeconds(60);
 
     private final OpenAiClient client;
-    private final OpenAiModelName modelName;
+    private final String modelName;
     private final Double temperature;
 
     // TODO consider adding here an option for system prompt configuration
 
     @Builder
     public OpenAiChatModel(String apiKey,
-                           OpenAiModelName modelName,
+                           String modelName,
                            Double temperature,
                            Duration timeout) {
         this.client = OpenAiClient.builder()
@@ -46,10 +60,10 @@ public class OpenAiChatModel implements ChatModel { // TODO all models in one "s
     }
 
     @Override
-    public MessageFromAi chat(List<ChatMessage> messages) {
+    public AiMessage chat(List<ChatMessage> messages) {
 
         ChatCompletionRequest request = ChatCompletionRequest.builder()
-                .model(modelName.getId())
+                .model(modelName)
                 .messages(toOpenAiMessages(messages))
                 .temperature(temperature)
                 .build();
@@ -68,13 +82,24 @@ public class OpenAiChatModel implements ChatModel { // TODO all models in one "s
             log.debug("Received from OpenAI in {} seconds:\n{}", secondsElapsed, json);
         }
 
-        return messageFromAi(response.content());
+        return aiMessage(response.content());
     }
 
     @Override
-    public void chat(List<ChatMessage> messages, ModelResponseHandler responseHandler) {
+    public AiMessage chat(ChatMessage... messages) {
+        return chat(asList(messages));
+    }
+
+    @Override
+    public String chat(String userMessage) {
+        AiMessage aiMessage = chat(userMessage(userMessage));
+        return aiMessage.contents();
+    }
+
+    @Override
+    public void chat(List<ChatMessage> messages, StreamingResponseHandler handler) {
         ChatCompletionRequest request = ChatCompletionRequest.builder()
-                .model(modelName.getId())
+                .model(modelName)
                 .messages(toOpenAiMessages(messages))
                 .temperature(temperature)
                 .stream(true)
@@ -82,10 +107,13 @@ public class OpenAiChatModel implements ChatModel { // TODO all models in one "s
 
         client.chatCompletion(request)
                 .onPartialResponse(partialResponse -> {
-                    responseHandler.handleResponseFragment(partialResponse.choices().get(0).delta().content());
+                    String content = partialResponse.choices().get(0).delta().content();
+                    if (content != null) {
+                        handler.onPartialResponse(content);
+                    }
                 })
-                .onComplete(responseHandler::handleResponseCompletion)
-                .onError(responseHandler::handleError)
+                .onComplete(handler::onComplete)
+                .onError(handler::onError)
                 .execute();
     }
 
@@ -98,9 +126,9 @@ public class OpenAiChatModel implements ChatModel { // TODO all models in one "s
     private static Message toOpenAiMessage(ChatMessage message) {
         Role role;
 
-        if (message instanceof MessageFromHuman) {
+        if (message instanceof UserMessage) {
             role = USER;
-        } else if (message instanceof MessageFromAi) {
+        } else if (message instanceof AiMessage) {
             role = ASSISTANT;
         } else {
             role = SYSTEM;
@@ -108,7 +136,70 @@ public class OpenAiChatModel implements ChatModel { // TODO all models in one "s
 
         return Message.builder()
                 .role(role)
-                .content(message.getContents())
+                .content(message.contents())
                 .build();
+    }
+
+    @Override
+    public <S> S getOne(Class<S> structured) {
+        return getMultiple(structured, 1).get(0);
+    }
+
+    @Override
+    public <S> List<S> getMultiple(Class<S> structured, int n) {
+        String description = structured.getAnnotation(Description.class).value();
+        String jsonStructure = generateJsonStructure(structured);
+        Optional<String> maybeJsonExample = generateJsonExample(structured);
+
+        PromptTemplate promptTemplate = PromptTemplate.from(
+                "Provide exactly {{number_of_examples}} example(s) of {{description}} in exactly following JSON format:\n" +
+                        "{{json_structure}}\n" +
+                        "\n" +
+                        "{{maybe_example}}" +
+                        "Do not provide any other information, just valid JSON object(s)!"
+        );
+
+        Map<String, Object> params = new HashMap<>();
+        params.put("number_of_examples", n);
+        params.put("description", description);
+        params.put("json_structure", jsonStructure);
+        params.put("maybe_example", maybeJsonExample
+                .map(example -> String.format("For example:\n%s\n\n", example))
+                .orElse(""));
+
+        String prompt = promptTemplate.format(params);
+
+        AiMessage aiMessage = chat(userMessage(prompt));
+
+        val jsonElements = parse(aiMessage.contents());
+
+        return jsonElements.stream()
+                .map(jsonElement -> {
+                    try {
+                        return Json.fromJson(jsonElement.toString(), structured);
+                    } catch (Exception e) {
+                        // TODO
+                        return null;
+                    }
+                })
+                .filter(Objects::nonNull)
+                .limit(n)
+                .collect(toList());
+    }
+
+    private static ArrayList<JsonElement> parse(String json) {
+        val reader = new JsonReader(new StringReader(json));
+        reader.setLenient(true);
+
+        val jsonElements = new ArrayList<JsonElement>();
+        try {
+            while (reader.peek() != JsonToken.END_DOCUMENT) {
+                jsonElements.add(JsonParser.parseReader(reader));
+            }
+        } catch (Exception e) {
+            // TODO
+        }
+
+        return jsonElements;
     }
 }

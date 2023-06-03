@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dev.ai4j.model.completion.structured.Description;
 import dev.ai4j.model.completion.structured.Example;
-import lombok.val;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
@@ -27,7 +26,7 @@ public class Json {
     }
 
     public static <S> String generateJsonStructure(Class<S> structured) {
-        val jsonStructure = new StringBuilder();
+        StringBuilder jsonStructure = new StringBuilder();
 
         jsonStructure.append("{\n");
         for (Field field : structured.getDeclaredFields()) {
@@ -48,7 +47,7 @@ public class Json {
             return Optional.empty();
         }
 
-        val jsonExample = new StringBuilder();
+        StringBuilder jsonExample = new StringBuilder();
 
         jsonExample.append("{\n");
         for (Field field : structured.getDeclaredFields()) {
@@ -71,9 +70,9 @@ public class Json {
 
     public static String toJsonExample(Field field) {
         Example fieldExample = field.getAnnotation(Example.class);
-        val examples = fieldExample.value();
+        String[] examples = fieldExample.value();
 
-        val fieldType = field.getType();
+        Class<?> fieldType = field.getType();
         boolean wrapInQuotes = fieldType == String.class
                 || fieldType == String[].class
                 || isCollectionOfStrings(field);
@@ -99,8 +98,8 @@ public class Json {
             return false;
         }
 
-        val genericType = (ParameterizedType) field.getGenericType();
-        val actualTypeArgument = (Class<?>) genericType.getActualTypeArguments()[0];
+        ParameterizedType genericType = (ParameterizedType) field.getGenericType();
+        Class<?> actualTypeArgument = (Class<?>) genericType.getActualTypeArguments()[0];
 
         return actualTypeArgument.equals(String.class);
     }
