@@ -7,29 +7,34 @@ Java library for smooth integration with AI tools and services.
   - [Chats](https://platform.openai.com/docs/guides/chat)
   - [Completions](https://platform.openai.com/docs/guides/completion)
   - [Embeddings](https://platform.openai.com/docs/guides/embeddings)
-- [Chat History](https://github.com/ai-for-java/ai4j/blob/master/examples/src/main/java/ChatExamples.java) (convenient short-term memory for conversations with AI)
-- [Chat Flow](https://github.com/ai-for-java/ai4j/blob/master/examples/src/main/java/ChatExamples.java) (easy way to chat with AI while keeping history)
-- [Document QnA Flow](https://github.com/ai-for-java/ai4j/blob/master/examples/src/main/java/DocumentQnAExamples.java) (easy way to ask AI questions based on specific document/knowledgebase)
+- [Chat History](https://github.com/ai-for-java/ai4j-examples/blob/master/src/main/java/ChatExamples.java) (convenient short-term memory for conversations with AI)
+- [Chat Flow](https://github.com/ai-for-java/ai4j-examples/blob/master/src/main/java/ChatExamples.java) (easy way to chat with AI while keeping history)
+- [Document QnA Flow](https://github.com/ai-for-java/ai4j-examples/blob/master/src/main/java/DocumentQnAExamples.java) (easy way to ask AI questions based on specific document/knowledgebase)
 - Integration with [Pinecone](https://docs.pinecone.io/docs/overview) vector database (embeddings)
-- [Structured outputs](https://github.com/ai-for-java/ai4j/blob/master/examples/src/main/java/StructuredOutputExamples.java) (get responses from LLM with a strict structure)
-- [Prompt templates](https://github.com/ai-for-java/ai4j/blob/master/examples/src/main/java/PromptTemplateExamples.java)
+- [Structured outputs](https://github.com/ai-for-java/ai4j-examples/blob/master/src/main/java/StructuredOutputExamples.java) (get responses from LLM with a strict structure)
+- [Prompt templates](https://github.com/ai-for-java/ai4j-examples/blob/master/src/main/java/PromptTemplateExamples.java)
 - Parsing and loading documents:
   - Text
   - PDF
-- Splitting big documents into overlapping chunks
+- Splitting big documents into chunks
 - Tokenizer (tokenize/detokenize, count tokens)
 
 ## Coming soon:
+- In-memory vector DB (good for prototyping and testing)
+- Composable flows (or chains): you will be able to define complex AI-based flows with your specific business logic
 - Powerful autonomous agents that can use tools:
-  - Searching the internet for up-to-date information
+  - Searching internet for up-to-date information
   - Scrapping web pages
+  - Executing code
   - Sending E-mails and messages
   - etc
 - Integration with more LLM providers (including local models)
-- Integrations with more vector DBs (including local and in-memory)
+- Integrations with more vector DB providers
 - Long-term memory for chats and agents
 - Automatic Document summarization
-- Loading of multiple Documents from directory
+- More document loaders
+- Loading of multiple Documents from a directory
+- Recursively crawl and load the whole website (if you want to kreate knowledgebase/embeddings from a website/website section)
 - Loading Documents via HTTP
 
 **Please [let us know what features you need](https://github.com/ai-for-java/ai4j/issues/new).**
@@ -40,20 +45,20 @@ Maven:
 <dependency>
   <groupId>dev.ai4j</groupId>
   <artifactId>ai4j</artifactId>
-  <version>0.2.1</version>
+  <version>0.3.0</version>
 </dependency>
 ```
 
 Gradle:
 ```
-implementation 'dev.ai4j:ai4j:0.2.1'
+implementation 'dev.ai4j:ai4j:0.3.0'
 ```
 
 ## See code examples
-- [Chat with AI](https://github.com/ai-for-java/ai4j/blob/master/examples/src/main/java/ChatExamples.java)
-- [Ask AI questions based on your document/knowledgebase](https://github.com/ai-for-java/ai4j/blob/master/examples/src/main/java/DocumentQnAExamples.java)
-- [Get structured responses from AI](https://github.com/ai-for-java/ai4j/blob/master/examples/src/main/java/StructuredOutputExamples.java)
-- [Prompts and PromptTemplates](https://github.com/ai-for-java/ai4j/blob/master/examples/src/main/java/PromptTemplateExamples.java)
+- [Chat with AI](https://github.com/ai-for-java/ai4j-examples/blob/master/src/main/java/ChatExamples.java)
+- [Ask AI questions based on your document/knowledgebase](https://github.com/ai-for-java/ai4j-examples/blob/master/src/main/java/DocumentQnAExamples.java)
+- [Get structured responses from AI](https://github.com/ai-for-java/ai4j-examples/blob/master/src/main/java/StructuredOutputExamples.java)
+- [Prompt templates](https://github.com/ai-for-java/ai4j-examples/blob/master/src/main/java/PromptTemplateExamples.java)
 
 ## Request features
 Please [let us know what features you need](https://github.com/ai-for-java/ai4j/issues/new). 
