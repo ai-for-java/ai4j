@@ -5,7 +5,7 @@ public interface ModelResponseHandler {
     default void handleResponseFragment(String responseFragment) {
     }
 
-    default void handleCompleteResponse(String completeResponse) {
+    default void handleResponseCompletion() {
     }
 
     default void handleError(Throwable t) {

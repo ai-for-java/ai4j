@@ -1,24 +1,21 @@
 package dev.ai4j.model.completion;
 
-import com.google.common.collect.ImmutableList;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
-import com.theokanning.openai.completion.CompletionRequest;
-import com.theokanning.openai.completion.chat.ChatCompletionRequest;
-import com.theokanning.openai.completion.chat.ChatMessage;
-import com.theokanning.openai.service.OpenAiService;
 import dev.ai4j.model.completion.structured.Description;
 import dev.ai4j.model.openai.OpenAiModelName;
+import dev.ai4j.openai4j.OpenAiClient;
+import dev.ai4j.openai4j.chat.ChatCompletionRequest;
+import dev.ai4j.openai4j.completion.CompletionRequest;
 import dev.ai4j.prompt.Prompt;
 import dev.ai4j.prompt.PromptTemplate;
 import dev.ai4j.utils.Json;
 import dev.ai4j.utils.StopWatch;
 import lombok.Builder;
+import lombok.extern.slf4j.Slf4j;
 import lombok.val;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.StringReader;
 import java.time.Duration;
@@ -31,20 +28,22 @@ import static dev.ai4j.model.openai.OpenAiModelName.GPT_3_5_TURBO;
 import static dev.ai4j.utils.Json.*;
 import static java.util.stream.Collectors.toList;
 
+@Slf4j
 public class OpenAiCompletionModel implements CompletionModel {
-
-    private static final Logger log = LoggerFactory.getLogger(OpenAiCompletionModel.class);
 
     private static final double DEFAULT_TEMPERATURE = 0.7;
     private static final Duration DEFAULT_TIMEOUT = Duration.ofSeconds(60);
 
-    private final OpenAiService openAiService;
+    private final OpenAiClient client;
     private final OpenAiModelName modelName;
     private final Double temperature;
 
     @Builder
     public OpenAiCompletionModel(String apiKey, OpenAiModelName modelName, Double temperature, Duration timeout) {
-        this.openAiService = new OpenAiService(apiKey, timeout == null ? DEFAULT_TIMEOUT : timeout);
+        this.client = OpenAiClient.builder()
+                .apiKey(apiKey)
+                .timeout(timeout == null ? DEFAULT_TIMEOUT : timeout)
+                .build();
         this.modelName = modelName == null ? GPT_3_5_TURBO : modelName;
         this.temperature = temperature == null ? DEFAULT_TEMPERATURE : temperature;
     }
@@ -56,7 +55,7 @@ public class OpenAiCompletionModel implements CompletionModel {
 
     @Override
     public String complete(String input) {
-        if (GPT_3_5_TURBO.getId().equals(modelName.getId())) {
+        if (GPT_3_5_TURBO.getId().equals(modelName.getId())) { // TODO remove this
             return chatCompletion(input);
         } else {
             return completion(input);
@@ -124,45 +123,46 @@ public class OpenAiCompletionModel implements CompletionModel {
         return jsonElements;
     }
 
-    // TODO remove duplication with OpenAiChatModel
     private String chatCompletion(String input) {
-        val chatCompletionRequest = ChatCompletionRequest.builder()
+
+        val request = ChatCompletionRequest.builder()
                 .model(modelName.getId())
-                .messages(ImmutableList.of(new ChatMessage("user", input)))
+                .addUserMessage(input)
                 .temperature(temperature)
                 .build();
 
         if (log.isDebugEnabled()) {
-            val json = toJson(chatCompletionRequest);
+            val json = toJson(request);
             log.debug("Sending to OpenAI:\n{}", json);
         }
         val sw = StopWatch.start();
 
-        val chatCompletionResult = openAiService.createChatCompletion(chatCompletionRequest);
+        val response = client.chatCompletion(request).execute();
 
         val secondsElapsed = sw.secondsElapsed();
         if (log.isDebugEnabled()) {
-            val json = toJson(chatCompletionResult);
+            val json = toJson(response);
             log.debug("Received from OpenAI in {} seconds:\n{}", secondsElapsed, json);
         }
 
-        return chatCompletionResult.getChoices().get(0).getMessage().getContent();
+        return response.content();
     }
 
     private String completion(String input) {
-        val completionRequest = CompletionRequest.builder()
+
+        val request = CompletionRequest.builder()
                 .model(modelName.getId())
                 .prompt(input)
                 .temperature(temperature)
                 .build();
 
         if (log.isDebugEnabled()) {
-            val json = toJson(completionRequest);
+            val json = toJson(request);
             log.debug("Sending to OpenAI:\n{}", json);
         }
         val sw = StopWatch.start();
 
-        val completionResult = openAiService.createCompletion(completionRequest);
+        val completionResult = client.completion(request).execute();
 
         val secondsElapsed = sw.secondsElapsed();
         if (log.isDebugEnabled()) {
@@ -170,6 +170,6 @@ public class OpenAiCompletionModel implements CompletionModel {
             log.debug("Received from OpenAI in {} seconds:\n{}", secondsElapsed, json);
         }
 
-        return completionResult.getChoices().get(0).getText();
+        return completionResult.text();
     }
 }

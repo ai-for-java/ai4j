@@ -1,11 +1,9 @@
 package dev.ai4j.model.embedding;
 
-import com.theokanning.openai.embedding.EmbeddingRequest;
-import com.theokanning.openai.service.OpenAiService;
 import dev.ai4j.document.Document;
-import dev.ai4j.model.embedding.Embedding;
-import dev.ai4j.model.embedding.EmbeddingModel;
 import dev.ai4j.model.openai.OpenAiModelName;
+import dev.ai4j.openai4j.OpenAiClient;
+import dev.ai4j.openai4j.embedding.EmbeddingRequest;
 import lombok.Builder;
 import lombok.val;
 
@@ -22,12 +20,15 @@ public class OpenAiEmbeddingModel implements EmbeddingModel {
 
     private static final Duration DEFAULT_TIMEOUT = Duration.ofSeconds(60);
 
-    private final OpenAiService openAiService;
+    private final OpenAiClient client;
     private final OpenAiModelName modelName;
 
     @Builder
     public OpenAiEmbeddingModel(String apiKey, OpenAiModelName modelName, Duration timeout) {
-        this.openAiService = new OpenAiService(apiKey, timeout == null ? DEFAULT_TIMEOUT : timeout);
+        this.client = OpenAiClient.builder()
+                .apiKey(apiKey)
+                .timeout(timeout == null ? DEFAULT_TIMEOUT : timeout)
+                .build();
         this.modelName = modelName == null ? TEXT_EMBEDDING_ADA_002 : modelName;
     }
 
@@ -52,14 +53,20 @@ public class OpenAiEmbeddingModel implements EmbeddingModel {
                 .model(modelName.getId())
                 .build();
 
-        val openAiEmbeddings = openAiService.createEmbeddings(embeddingRequest).getData();
+        val openAiEmbeddings = client.embedding(embeddingRequest).execute().data();
 
         return zip(documentContents, openAiEmbeddings);
     }
 
-    private static List<Embedding> zip(List<String> documentTexts, List<com.theokanning.openai.embedding.Embedding> openAiEmbeddings) {
+    private static List<Embedding> zip(List<String> documentTexts, List<dev.ai4j.openai4j.embedding.Embedding> openAiEmbeddings) {
         return IntStream.range(0, documentTexts.size())
-                .mapToObj(i -> new Embedding(documentTexts.get(i), openAiEmbeddings.get(i).getEmbedding()))
+                .mapToObj(i -> new Embedding(documentTexts.get(i), toDoubles(openAiEmbeddings.get(i).embedding())))
+                .collect(toList());
+    }
+
+    private static List<Double> toDoubles(List<Float> floats) {
+        return floats.stream()
+                .map(Float::doubleValue)
                 .collect(toList());
     }
 }

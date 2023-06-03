@@ -8,5 +8,5 @@ public interface ChatModel {
 
     MessageFromAi chat(List<ChatMessage> messages);
 
-    void chat(List<ChatMessage> messages, ModelResponseHandler modelResponseHandler);
+    void chat(List<ChatMessage> messages, ModelResponseHandler responseHandler); // TODO stream? async?
 }

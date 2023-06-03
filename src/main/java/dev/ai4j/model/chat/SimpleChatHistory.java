@@ -1,18 +1,16 @@
 package dev.ai4j.model.chat;
 
+import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import lombok.var;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 public class SimpleChatHistory implements ChatHistory {
-
-    private static final Logger log = LoggerFactory.getLogger(SimpleChatHistory.class);
 
     // safety net to limit the cost in case user did not define it himself
     private static final int DEFAULT_CAPACITY_IN_TOKENS = 200;

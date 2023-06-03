@@ -8,5 +8,5 @@ import java.util.List;
 public class Embedding {
 
     String content;
-    List<Double> vector;
+    List<Double> vector; // TODO float?
 }
