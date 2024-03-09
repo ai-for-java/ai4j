@@ -59,7 +59,7 @@
         <dependency>
             <groupId>dev.ai4j</groupId>
             <artifactId>openai4j</artifactId>
-            <version>0.2.0</version>
+            <version>0.15.0</version>
         </dependency>
 
         <!-- TODO remove -->
